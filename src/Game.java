@@ -9,6 +9,7 @@ public class Game extends Window implements ActionListener {
     private Level level;
     Timer timer;
     int[] dx, dy;
+    int adb;
     private int ghost_dx, ghost_dy;
     private int count;
 
