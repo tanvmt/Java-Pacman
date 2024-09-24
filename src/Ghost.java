@@ -46,8 +46,15 @@ class Ghost {
         move();
     }
 
-    public void draw(Graphics g) {
-        g.setColor(color);
-        g.fillOval(x, y, 30, 30); // Vẽ ma dưới dạng hình tròn
+    public Color getColor(){
+        return this.color;
+    }
+
+    public int getX(){
+        return this.x;
+    }
+    
+    public int getY(){
+        return this.y;
     }
 }
