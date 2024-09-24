@@ -6,8 +6,10 @@ import javax.swing.*;
 
 public class Game extends Window implements ActionListener {
     private Ghost ghost;
+    private Level level;
     Timer timer;
     int[] dx, dy;
+    private int startGhost_x, startGhost_y;
     private int ghost_dx, ghost_dy;
     private int count;
 
@@ -19,6 +21,7 @@ public class Game extends Window implements ActionListener {
         setLayout(new BorderLayout());
         initVariables();
         initGhosts();
+        initLevel();
     }
 
     void initVariables() {
@@ -32,12 +35,26 @@ public class Game extends Window implements ActionListener {
         ghost = new Ghost(getMAX_X() / 4 + 50, getMAX_Y() / 4 + 50, Color.RED, 6, 1, 0);
     }
     
+    void initLevel(){
+        level = new Level();
+    }
+    
     void drawMaze(Graphics2D g2D) {
         g2D.setColor(Color.BLUE);
         g2D.setStroke(new BasicStroke(5));
-        g2D.drawRect(getMAX_X() / 4, getMAX_Y() / 4, getMAX_X() / 2, getMAX_Y() / 2);
+        g2D.drawRect(getMAX_X() / 2 - BLOCK_SIZE * 3, getMAX_Y() / 2 - BLOCK_SIZE * 3, BLOCK_SIZE * 6, BLOCK_SIZE * 6);
+    }
+
+    void drawGhosts(Graphics2D g2D){
+        g2D.setColor(ghost.getColor());
+        g2D.fillOval(ghost.getX(),ghost.getY() , BLOCK_SIZE, BLOCK_SIZE);
     }
     
+    void moveGhosts(){
+        int pos;
+
+    }
+
     @Override
     protected void paintComponent(Graphics g) {
 
@@ -46,17 +63,16 @@ public class Game extends Window implements ActionListener {
         Graphics2D g2D = (Graphics2D) g;
         drawMaze(g2D);
 
-        ghost.update();   // Cập nhật vị trí
-            ghost.draw(g); 
+        ghost.update();   
+        drawGhosts(g2D); 
     }
 
 
-    // Cập nhật trạng thái của tất cả ma
     public void updateGame() {
         
-            ghost.move();  // Di chuyển từng con ma
+            ghost.move();  
        
-        repaint();  // Cập nhật lại màn hình
+        repaint();  
     }
 
     @Override
