@@ -1,0 +1,15 @@
+- Main Objective: Control Pac-Man to eat all the small dots on the map to complete the level.
+- Bonus Points: Eat the large dots (power pellets) to make the ghosts vulnerable to being eaten for a short period.
+- Movement: Use the arrow keys (up, down, left, right) to control Pac-Man's movement on the map.
+- Running: Pac-Man moves continuously in the direction you choose until he encounters an obstacle (a wall) or changes direction.
+- Small Dots (Dots): These are scattered throughout the map, and eating all the small dots completes the level.
+- Large Dots (Power Pellets): Located in the corners of the map, eating these makes the ghosts vulnerable to being eaten for a limited time.
+- Ghost Names: There are four main ghosts named Blinky, Pinky, Inky, and Clyde.
+- Behavior: The ghosts move in different patterns and try to catch Pac-Man. Blinky always follows Pac-Man, while the other ghosts have more complex behaviors.
+- Defeated: When Pac-Man eats a large dot, the ghosts turn blue and can be eaten by Pac-Man. After being eaten, the ghosts return to the center of the map.
+- Small Dots: Each small dot gives points.
+- Large Dots: Eating large dots gives higher bonus points and allows Pac-Man to eat the ghosts.
+- Fruit: Occasionally, fruits appear on the map, and eating them gives additional points.
+- Losing a Life: If a ghost touches Pac-Man, he loses a life. The game ends when Pac-Man runs out of lives.
+- Ghost Speed: As time progresses and the levels continue, the ghosts move faster and become harder to avoid.
+- Pac-Man is not only a challenge of reflexes and strategy but also a part of pop culture, famous for its simple yet addictive gameplay.
