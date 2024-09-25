@@ -255,6 +255,7 @@ class MainPanel extends Window implements ActionListener {
             cl.first(this);
         if (source == play.modeButtons[0]) {
             cl.show(this, "Game");
+            game.timer.start();
         }
     }
 }
