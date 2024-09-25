@@ -1,5 +1,8 @@
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Image;
+
+import javax.swing.ImageIcon;
 
 class Ghost {
     private int x,y;
@@ -7,6 +10,7 @@ class Ghost {
     private int dx, dy;
     private Color color;
     private boolean isFrightened;
+    Image defaultIcon, frightenedIcon, changeStateIcon;
 
     public Ghost(int x, int y, Color color, int speed, int dx, int dy) {
         this.x = x;
@@ -16,6 +20,9 @@ class Ghost {
         this.speed = speed;
         this.color = color;
         this.isFrightened = false;
+        defaultIcon = new ImageIcon("src/ghost.gif").getImage().getScaledInstance(24, 24, Image.SCALE_DEFAULT);
+        frightenedIcon = new ImageIcon("src/frightened ghosts.gif").getImage().getScaledInstance(24, 24, Image.SCALE_DEFAULT);
+        changeStateIcon = new ImageIcon("src/ghosts change state.gif").getImage().getScaledInstance(24, 24, Image.SCALE_DEFAULT);
     }
 
     public void setDirection(int dx, int dy) {
