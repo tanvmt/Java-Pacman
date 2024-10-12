@@ -61,8 +61,8 @@ class MainPanel extends Window implements ActionListener {
 
     private void loadImages() {
         logo = new ImageIcon("src/logo.png").getImage();
-        icon1 = new ImageIcon("src/menu icon.png").getImage();
-        icon2 = new ImageIcon("src/menu icon 2.png").getImage();
+        icon1 = new ImageIcon("src/menu_icon.png").getImage();
+        icon2 = new ImageIcon("src/menu_icon_2.png").getImage();
     }
 
     private void drawLogo(Graphics2D g2D) {

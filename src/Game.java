@@ -43,8 +43,6 @@ public class Game extends Window implements ActionListener {
     }
 
     void drawGhosts(Graphics2D g2D) {
-        // g2D.setColor(ghost.getColor());
-        // g2D.fillOval(ghost.getX(), ghost.getY(), BLOCK_SIZE, BLOCK_SIZE);
         g2D.drawImage(ghost.defaultIcon, ghost.getX(), ghost.getY(), this);
     }
 
