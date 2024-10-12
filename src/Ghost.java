@@ -21,8 +21,8 @@ class Ghost {
         this.color = color;
         this.isFrightened = false;
         defaultIcon = new ImageIcon("src/ghost.gif").getImage().getScaledInstance(24, 24, Image.SCALE_DEFAULT);
-        frightenedIcon = new ImageIcon("src/frightened ghosts.gif").getImage().getScaledInstance(24, 24, Image.SCALE_DEFAULT);
-        changeStateIcon = new ImageIcon("src/ghosts change state.gif").getImage().getScaledInstance(24, 24, Image.SCALE_DEFAULT);
+        frightenedIcon = new ImageIcon("src/frightened_ghosts.gif").getImage().getScaledInstance(24, 24, Image.SCALE_DEFAULT);
+        changeStateIcon = new ImageIcon("src/ghosts_change_state.gif").getImage().getScaledInstance(24, 24, Image.SCALE_DEFAULT);
     }
 
     public void setDirection(int dx, int dy) {
