@@ -6,9 +6,12 @@ import java.io.FileReader;
 import java.io.IOException;
 
 class Window extends JPanel {
-    final int MAX_X = 1366;
-    final int MAX_Y = 768;
-    final int BLOCK_SIZE = 24;
+    protected final int MAX_X = 1366;
+    protected final int MAX_Y = 768;
+    protected final int BLOCK_SIZE = 24;
+    protected final int N_BLOCKS = 31;
+    protected final int SCREEN_SIZE = N_BLOCKS * BLOCK_SIZE;
+    protected short[] screenData;
 
 
     public int getMAX_X() {
