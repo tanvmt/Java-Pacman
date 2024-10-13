@@ -19,10 +19,10 @@ class Ghost {
         this.dy = dy;
         this.speed = speed;
         this.color = color;
-        this.isFrightened = false;
-        defaultIcon = new ImageIcon("src/ghost.gif").getImage().getScaledInstance(24, 24, Image.SCALE_DEFAULT);
-        frightenedIcon = new ImageIcon("src/frightened_ghosts.gif").getImage().getScaledInstance(24, 24, Image.SCALE_DEFAULT);
-        changeStateIcon = new ImageIcon("src/ghosts_change_state.gif").getImage().getScaledInstance(24, 24, Image.SCALE_DEFAULT);
+        // this.isFrightened = false;
+        defaultIcon = new ImageIcon("src/ghost.gif").getImage().getScaledInstance(14, 14, Image.SCALE_DEFAULT);
+        // frightenedIcon = new ImageIcon("src/frightened_ghosts.gif").getImage().getScaledInstance(24, 24, Image.SCALE_DEFAULT);
+        // changeStateIcon = new ImageIcon("src/ghosts_change_state.gif").getImage().getScaledInstance(24, 24, Image.SCALE_DEFAULT);
     }
 
     public void setDirection(int dx, int dy) {
@@ -35,19 +35,19 @@ class Ghost {
         y += dy * speed;
     }
 
-    public void setFrightened(boolean isFrightened) {
-        this.isFrightened = isFrightened;
-        if (isFrightened) {
-            color = Color.BLUE;
-        }
-    }
+    // public void setFrightened(boolean isFrightened) {
+    //     this.isFrightened = isFrightened;
+    //     if (isFrightened) {
+    //         color = Color.BLUE;
+    //     }
+    // }
     
-    public void reset(int startX, int startY) {
-        this.x = startX;
-        this.y = startY;
-        this.isFrightened = false;
-        this.color = Color.RED;
-    }
+    // public void reset(int startX, int startY) {
+    //     this.x = startX;
+    //     this.y = startY;
+    //     this.isFrightened = false;
+    //     this.color = Color.RED;
+    // }
 
     public void update() {
         move();
@@ -61,7 +61,14 @@ class Ghost {
         return this.x;
     }
     
-    public int getY(){
+    public int getY() {
         return this.y;
+    }
+    
+    public int getDx() {
+        return dx;
+    }
+    public int getDy() {
+        return dy;
     }
 }
