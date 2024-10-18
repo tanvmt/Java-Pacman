@@ -22,6 +22,9 @@ public class Game extends Window implements KeyListener {
     private int score = 0;
     private boolean inGame = true;
     private Image up, down, left, right, basic;
+
+    private JLabel scoreLabel, showScore, livesLabel, move, pause, resume, levelLabel, showLevel;
+    private Image arrowKeys, spaceKey, escKey, hearts[];
    
     Game() {
 
@@ -52,14 +55,56 @@ public class Game extends Window implements KeyListener {
         cl.show(getParent(), "Menu");  // Switch back to the menu in MainPanel
     }
     
-        public void loadImage(){
-        up = new ImageIcon("src\\up.gif").getImage().getScaledInstance(14, 14, Image.SCALE_DEFAULT);
-        down = new ImageIcon("src\\down.gif").getImage().getScaledInstance(14, 14, Image.SCALE_DEFAULT);
-        left = new ImageIcon("src\\left.gif").getImage().getScaledInstance(14, 14, Image.SCALE_DEFAULT);
-        right = new ImageIcon("src\\right.gif").getImage().getScaledInstance(14, 14, Image.SCALE_DEFAULT);
-        basic = new ImageIcon("src\\pacman.png").getImage().getScaledInstance(14, 14, Image.SCALE_DEFAULT);
+    public void loadImage() {
+        up = new ImageIcon("src\\Image\\up.gif").getImage().getScaledInstance(14, 14, Image.SCALE_DEFAULT);
+        down = new ImageIcon("src\\Image\\down.gif").getImage().getScaledInstance(14, 14, Image.SCALE_DEFAULT);
+        left = new ImageIcon("src\\Image\\left.gif").getImage().getScaledInstance(14, 14, Image.SCALE_DEFAULT);
+        right = new ImageIcon("src\\Image\\right.gif").getImage().getScaledInstance(14, 14, Image.SCALE_DEFAULT);
+        basic = new ImageIcon("src\\Image\\pacman.png").getImage().getScaledInstance(14, 14, Image.SCALE_DEFAULT);
+
+        arrowKeys = new ImageIcon("src\\Image\\Arrow_keys.png").getImage();
+        arrowKeys = arrowKeys.getScaledInstance(arrowKeys.getWidth(this) * 2, arrowKeys.getHeight(this) * 2,
+                Image.SCALE_DEFAULT);
+        
+        escKey = new ImageIcon("src\\Image\\Esc_key.png").getImage();
+        escKey = escKey.getScaledInstance(escKey.getWidth(this) * 2, escKey.getHeight(this) * 2,
+                Image.SCALE_DEFAULT);
+
+        spaceKey = new ImageIcon("src\\Image\\Space_key.png").getImage();
+        spaceKey = spaceKey.getScaledInstance(spaceKey.getWidth(this) * 2, spaceKey.getHeight(this) * 2,
+                Image.SCALE_DEFAULT);
+
+        hearts = new Image[3];
+        hearts[0] = new ImageIcon("src\\Image\\1_heart.png").getImage();
+        hearts[1] = new ImageIcon("src\\Image\\2_hearts.png").getImage();
+        hearts[2] = new ImageIcon("src\\Image\\3_hearts.png").getImage();
+        for (int i = 0; i < 3; i++) {
+            hearts[i] = hearts[i].getScaledInstance(hearts[i].getWidth(this) * 3, hearts[i].getHeight(this) * 3,
+                    Image.SCALE_DEFAULT);
+        }
     }
     
+    public void drawBackground(Graphics2D g2D) {
+        
+        add(move);
+        g2D.drawImage(arrowKeys, 75 + (150 - arrowKeys.getWidth(this)) / 2, move.getY() + 50, this);
+        
+        add(pause);
+        g2D.drawImage(escKey, 75 + (150 - escKey.getWidth(this)) / 2, pause.getY() + 50, this);
+        
+        add(resume);
+        g2D.drawImage(spaceKey, 75 + (150 - spaceKey.getWidth(this)) / 2, resume.getY() + 50,
+                this);
+        
+        add(levelLabel);
+        
+        add(showLevel);
+        
+        add(scoreLabel);
+        add(showScore);
+        add(livesLabel);
+        g2D.drawImage(hearts[2], MAX_X - 220 + (150 - hearts[2].getWidth(this))/2, livesLabel.getY() + 50, this);
+    }
     
     void initPacman(){
         req_dx = 0;
@@ -99,6 +144,7 @@ public class Game extends Window implements KeyListener {
             if((ch&16) != 0){
                 screenData[pos] = (short) (ch & 15);
                 score++;
+                showScore.setText(String.valueOf(score));
             }
             
             if(req_dx != 0 || req_dy !=0){
@@ -128,7 +174,19 @@ public class Game extends Window implements KeyListener {
         dx = new int[4];
         dy = new int[4];
         timer = new Timer(40, e -> this.updateGame());
-        backButton = createButton("BACK", 0, 0,150,50, e -> returnToMenu());
+
+        backButton = createButton("BACK", 0, 0, 150, 50, e -> returnToMenu());
+
+        move = createLabel("MOVE", 75, 150);
+        pause = createLabel("PAUSE", 75, move.getY() + move.getHeight() + 150);
+        resume = createLabel("RESUME", 75, move.getY() + move.getHeight() + 300);
+
+        levelLabel = createLabel("LEVEL", MAX_X - 220, 150);
+        showLevel = createLabel("1", MAX_X - 220, 200);
+        scoreLabel = createLabel("SCORE", MAX_X - 220, 300);
+        showScore = createLabel(--score + "", MAX_X - 220, 350);
+        livesLabel = createLabel("LIVES", MAX_X - 220, 450);
+
     }
 
     void initGhosts() {// vị tris ghost
@@ -231,9 +289,11 @@ public class Game extends Window implements KeyListener {
 
         Graphics2D g2D = (Graphics2D) g;
         level.drawMaze(g2D);
-
+        drawBackground(g2D);
         drawPacman(g2D);
         drawGhosts(g2D);
+        
+        
     }
 
     public void updateGame() {

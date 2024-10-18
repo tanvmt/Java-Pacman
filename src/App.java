@@ -27,6 +27,16 @@ class Window extends JPanel {
         button.addActionListener(listener);
         return button;
     }
+
+    protected JLabel createLabel(String text, int x, int y) {
+        JLabel label = new JLabel(text);
+        label.setFont(new Font("Arial", Font.BOLD, 30));
+        label.setForeground(Color.RED);
+        // label.setBorder(BorderFactory.createBevelBorder(0));
+        label.setBounds(x, y, 150, 50);
+        label.setHorizontalAlignment(SwingConstants.CENTER);
+        return label;
+    }
 }
 
 class MainPanel extends Window implements ActionListener {
@@ -62,9 +72,9 @@ class MainPanel extends Window implements ActionListener {
     
 
     private void loadImages() {
-        logo = new ImageIcon("src/logo.png").getImage();
-        icon1 = new ImageIcon("src/menu_icon.png").getImage();
-        icon2 = new ImageIcon("src/menu_icon_2.png").getImage();
+        logo = new ImageIcon("src/Image/logo.png").getImage();
+        icon1 = new ImageIcon("src/Image/menu_icon.png").getImage();
+        icon2 = new ImageIcon("src/Image/menu_icon_2.png").getImage();
     }
 
     private void drawLogo(Graphics2D g2D) {
