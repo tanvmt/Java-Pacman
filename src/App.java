@@ -14,22 +14,23 @@ class Window extends JPanel {
     protected short[] screenData;
 
 
-    public int getMAX_X() {
-        return MAX_X;
-    }
-
-    public int getMAX_Y() {
-        return MAX_Y;
-    }
-
-    public int getBlockSize(){
-        return BLOCK_SIZE;
+    
+    
+    protected JButton createButton(String text, int x, int y, int width, int height, ActionListener listener) {
+        JButton button = new JButton(text);
+        button.setBounds(x, y, width, height);
+        button.setFont(new Font("Arial", Font.BOLD, 40));
+        button.setBackground(Color.BLACK);
+        button.setForeground(Color.RED);
+        button.setBorderPainted(false);
+        button.setFocusPainted(false);
+        button.addActionListener(listener);
+        return button;
     }
 }
 
 class MainPanel extends Window implements ActionListener {
     Menu menu;
-    Play play;
     Instructions instructions;
     Highscores highscores;
     CardLayout cl;
@@ -46,7 +47,6 @@ class MainPanel extends Window implements ActionListener {
         cl = new CardLayout();
         setLayout(cl);
         menu = new Menu();
-        play = new Play();
         instructions = new Instructions();
         highscores = new Highscores();
         game = new Game();
@@ -54,7 +54,6 @@ class MainPanel extends Window implements ActionListener {
 
     private void addPanels() {
         this.add("Menu", menu);
-        this.add("Play", play);
         this.add("Instructions", instructions);
         this.add("Highscores", highscores);
         this.add("Game", game);
@@ -76,17 +75,7 @@ class MainPanel extends Window implements ActionListener {
         g2D.drawImage(icon2, 1296, 676, this);
     }
 
-    private JButton createButton(String text, int x, int y) {
-        JButton button = new JButton(text);
-        button.setBounds(x, y, 400, 50);
-        button.setFont(new Font("Arial", Font.BOLD, 40));
-        button.setBackground(Color.BLACK);
-        button.setForeground(Color.RED);
-        button.setBorderPainted(false);
-        button.setFocusPainted(false);
-        button.addActionListener(MainPanel.this);
-        return button;
-    }
+    
 
     @Override
     public void paintComponent(Graphics g) {
@@ -107,37 +96,13 @@ class MainPanel extends Window implements ActionListener {
         private void initButtons() {
             String[] labels = { "PLAY", "INSTRUCTIONS", "HIGHSCORES", "QUIT" };
             for (int i = 0; i < 4; i++) {
-                menuButtons[i] = createButton(labels[i], getMAX_X() / 2 - 200, getMAX_Y() / 2 - 50 + 100 * i);
+                menuButtons[i] = createButton(labels[i], MAX_X / 2 - 200, MAX_Y / 2 - 50 + 100 * i, 400, 50, MainPanel.this);
                 this.add(menuButtons[i]);
             }
         }
 
         
         
-
-        @Override
-        public void paintComponent(Graphics g) {
-            super.paintComponent(g);
-            drawLogo((Graphics2D) g);
-        }
-    }
-
-    class Play extends Window {
-        JButton[] modeButtons = new JButton[3];
-
-        Play() {
-            initButtons();
-            setLayout(null);
-            setBackground(Color.BLACK);
-        }
-
-        private void initButtons() {
-            String[] modes = { "EASY", "HARD", "BACK" };
-            for (int i = 0; i < 3; i++) {
-                modeButtons[i] = createButton(modes[i], getMAX_X() / 2 - 200, getMAX_Y() / 2 - 50 + 100 * i);
-                this.add(modeButtons[i]);
-            }
-        }
 
         @Override
         public void paintComponent(Graphics g) {
@@ -155,10 +120,10 @@ class MainPanel extends Window implements ActionListener {
         Instructions() {
             setLayout(null);
             setBackground(Color.BLACK);
-            backButton = createButton("BACK", getMAX_X() / 2 - 200, getMAX_Y() / 2 + 250);
+            backButton = createButton("BACK", MAX_X / 2 - 200, MAX_Y / 2 + 250, 400, 50, MainPanel.this);
 
             String text = "src/Instructions.txt";
-            instructionsArea = createTextArea(text, getMAX_X() / 2 - 300, getMAX_Y() / 2 - 100);
+            instructionsArea = createTextArea(text, MAX_X / 2 - 300, MAX_Y / 2 - 100);
 
             this.add(backButton);
             this.add(instructionsArea);
@@ -216,9 +181,9 @@ class MainPanel extends Window implements ActionListener {
         Highscores() {
             setLayout(null);
             setBackground(Color.BLACK);
-            backButton = createButton("BACK", getMAX_X() / 2 - 200, getMAX_Y() / 2 + 250);
-            scoresArea = createTextArea("1. Player A: 1000\n2. Player B: 900\n3. Player C: 800", getMAX_X() / 2 - 300,
-                    getMAX_Y() / 2 - 100);
+            backButton = createButton("BACK", MAX_X / 2 - 200, MAX_Y / 2 + 250, 400, 50, MainPanel.this);
+            scoresArea = createTextArea("1. Player A: 1000\n2. Player B: 900\n3. Player C: 800", MAX_X / 2 - 300,
+                    MAX_Y / 2 - 100);
             this.add(backButton);
             this.add(scoresArea);
         }
@@ -248,31 +213,19 @@ class MainPanel extends Window implements ActionListener {
         Object source = e.getSource();
         if (source == menu.menuButtons[3])
             System.exit(0);
-        if (source == menu.menuButtons[0])
-            cl.show(this, "Play");
+        if (source == menu.menuButtons[0]) {
+            game.resetGame();
+            cl.show(this, "Game");
+            game.timer.start();
+        }
         if (source == menu.menuButtons[1])
             cl.show(this, "Instructions");
         if (source == menu.menuButtons[2])
             cl.show(this, "Highscores");
-        if (source == play.modeButtons[2] || source == instructions.backButton || source == highscores.backButton)
+        if (source == instructions.backButton || source == highscores.backButton)
             cl.first(this);
-        if (source == play.modeButtons[0]) {
-            cl.show(this, "Game");
-            game.timer.start();
-        }
     }
 }
-
-// class Game extends Window {
-//     Button b;
-
-//     Game() {
-//         setBackground(Color.BLACK);
-//         b = new Button("SDJALKDKSAJDLK");
-//         setLayout(new BorderLayout());
-//         add(b);
-//     }
-// }
 
 class MyFrame extends JFrame
 {
@@ -296,7 +249,7 @@ class MyFrame extends JFrame
     void initFrame()
     {
         setBackground(Color.BLACK);
-        setSize(mainPanel.getMAX_X(), mainPanel.getMAX_Y());
+        setSize(mainPanel.MAX_X, mainPanel.MAX_Y);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setVisible(true);

@@ -8,7 +8,8 @@ import java.awt.event.KeyListener;
 
 import javax.swing.*;
 
-public class Game extends Window implements ActionListener,KeyListener {
+public class Game extends Window implements KeyListener {
+    private JButton backButton;
     private Ghost[] ghost;
     private Level level;
     public Timer timer, frightenedGhostTimer;
@@ -23,17 +24,15 @@ public class Game extends Window implements ActionListener,KeyListener {
     private Image up, down, left, right, basic;
    
     Game() {
-        
-       
+
         setBackground(Color.BLACK);
-        setLayout(new BorderLayout());
+        setLayout(null);
         loadImage();
         initVariables();
         initGhosts();
         initLevel();
-        
-        
-        
+        add(backButton);
+
         initPacman();
         System.out.println("11111111111111");
         setFocusable(true);
@@ -41,10 +40,16 @@ public class Game extends Window implements ActionListener,KeyListener {
         System.out.println("22222222222222");
 
         addComponentListener(new java.awt.event.ComponentAdapter() {
-        public void componentShown(java.awt.event.ComponentEvent evt) {
-            requestFocusInWindow();
-        }
+            public void componentShown(java.awt.event.ComponentEvent evt) {
+                requestFocusInWindow();
+            }
         });
+    }
+    
+    private void returnToMenu() {
+        timer.stop();  // Stop the game timer when returning to the menu
+        CardLayout cl = (CardLayout) getParent().getLayout();
+        cl.show(getParent(), "Menu");  // Switch back to the menu in MainPanel
     }
     
         public void loadImage(){
@@ -123,14 +128,15 @@ public class Game extends Window implements ActionListener,KeyListener {
         dx = new int[4];
         dy = new int[4];
         timer = new Timer(40, e -> this.updateGame());
+        backButton = createButton("BACK", 0, 0,150,50, e -> returnToMenu());
     }
 
     void initGhosts() {// vị tris ghost
         ghost = new Ghost[4];
         ghost[0] = new Ghost((MAX_X - SCREEN_SIZE) / 2 + 5, 5, Color.RED, 4, 0, 0);
-        ghost[1] = new Ghost((MAX_X-SCREEN_SIZE)/2+5, 5+BLOCK_SIZE*30, Color.RED, 4, 0, 0);
-        ghost[2] = new Ghost((MAX_X-SCREEN_SIZE)/2+5 + BLOCK_SIZE*30, 5, Color.RED, 4, 0, 0);
-        ghost[3] = new Ghost((MAX_X-SCREEN_SIZE)/2+5 + BLOCK_SIZE*30, 5+BLOCK_SIZE*30, Color.RED, 4, 0, 0);
+        ghost[1] = new Ghost((MAX_X - SCREEN_SIZE) / 2 + 5, 5 + BLOCK_SIZE * 30, Color.RED, 4, 0, 0);
+        ghost[2] = new Ghost((MAX_X - SCREEN_SIZE) / 2 + 5 + BLOCK_SIZE * 30, 5, Color.RED, 4, 0, 0);
+        ghost[3] = new Ghost((MAX_X - SCREEN_SIZE) / 2 + 5 + BLOCK_SIZE * 30, 5 + BLOCK_SIZE * 30, Color.RED, 4, 0, 0);
     }
 
     void initLevel() {
@@ -146,18 +152,14 @@ public class Game extends Window implements ActionListener,KeyListener {
     }
 
     void moveGhosts() {
-        // int direction = 1; //0: left, 1: right, 2: up, 3:down;
-        // ghost.setDirection(dx[direction], dy[direction]);
-        // Random rand = 
-        // int direction = Math.random()
-        for (int i = 0; i < 4;i++){
+        for (int i = 0; i < 4; i++) {
             ghost_dx = ghost[i].getDx();
             ghost_dy = ghost[i].getDy();
             ghost_x = ghost[i].getX();
             ghost_y = ghost[i].getY();
             int pos = 0;
             int count = 0;
-            
+
             if ((ghost_x - 4) % BLOCK_SIZE == 0 && (ghost_y - 5) % BLOCK_SIZE == 0) {
                 pos = (ghost_x - 4 + N_BLOCKS * (ghost_y - 5) - (MAX_X - SCREEN_SIZE) / 2) / BLOCK_SIZE;
 
@@ -209,7 +211,15 @@ public class Game extends Window implements ActionListener,KeyListener {
             }
             ghost[i].move();
         }
-        
+
+    }
+
+    void resetGame() {
+        score = 0;
+        initVariables();
+        initLevel();
+        initGhosts();
+        initPacman();
 
     }
 
@@ -304,11 +314,6 @@ public void keyPressed(KeyEvent e) {
     @Override
     public void keyReleased(KeyEvent e) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        repaint();
     }
     
 }
