@@ -20,7 +20,7 @@ class Ghost {
         this.speed = speed;
         this.color = color;
         // this.isFrightened = false;
-        defaultIcon = new ImageIcon("src/ghost.gif").getImage().getScaledInstance(14, 14, Image.SCALE_DEFAULT);
+        defaultIcon = new ImageIcon("src/Image/ghost.gif").getImage().getScaledInstance(14, 14, Image.SCALE_DEFAULT);
         // frightenedIcon = new ImageIcon("src/frightened_ghosts.gif").getImage().getScaledInstance(24, 24, Image.SCALE_DEFAULT);
         // changeStateIcon = new ImageIcon("src/ghosts_change_state.gif").getImage().getScaledInstance(24, 24, Image.SCALE_DEFAULT);
     }
