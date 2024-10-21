@@ -347,8 +347,8 @@ public class Game extends Window implements KeyListener {
             announcement();
             System.out.println(namePlayer+ " " +score);
             WriterScore();
-            // returnToMenu();
-            newMenu();
+            returnToMenu();
+            // newMenu();
         }
     }
 
