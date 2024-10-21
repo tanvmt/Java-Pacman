@@ -33,7 +33,7 @@ public class Game extends Window implements KeyListener {
     private String namePlayer;
 
     private JLabel scoreLabel, showScore, livesLabel, move, pause, resume, levelLabel, showLevel;
-    private Image arrowKeys, spaceKey, escKey, hearts[];
+    private Image arrowKeys, spaceKey, escKey, heart;
     MyFrame tmpMyFrame;
    
     Game() {
@@ -82,7 +82,7 @@ public class Game extends Window implements KeyListener {
         arrowKeys = new ImageIcon("src\\Image\\Arrow_keys.png").getImage();
         arrowKeys = arrowKeys.getScaledInstance(arrowKeys.getWidth(this) * 2, arrowKeys.getHeight(this) * 2,
                 Image.SCALE_DEFAULT);
-        
+
         escKey = new ImageIcon("src\\Image\\Esc_key.png").getImage();
         escKey = escKey.getScaledInstance(escKey.getWidth(this) * 2, escKey.getHeight(this) * 2,
                 Image.SCALE_DEFAULT);
@@ -91,14 +91,8 @@ public class Game extends Window implements KeyListener {
         spaceKey = spaceKey.getScaledInstance(spaceKey.getWidth(this) * 2, spaceKey.getHeight(this) * 2,
                 Image.SCALE_DEFAULT);
 
-        hearts = new Image[3];
-        hearts[0] = new ImageIcon("src\\Image\\1_heart.png").getImage();
-        hearts[1] = new ImageIcon("src\\Image\\2_hearts.png").getImage();
-        hearts[2] = new ImageIcon("src\\Image\\3_hearts.png").getImage();
-        for (int i = 0; i < 3; i++) {
-            hearts[i] = hearts[i].getScaledInstance(hearts[i].getWidth(this) * 3, hearts[i].getHeight(this) * 3,
-                    Image.SCALE_DEFAULT);
-        }
+        heart = new ImageIcon("src\\Image\\1_heart.png").getImage();
+        heart = heart.getScaledInstance(heart.getWidth(this) * 3, heart.getHeight(this) * 3, Image.SCALE_DEFAULT);
     }
     
     public void drawBackground(Graphics2D g2D) {
@@ -120,7 +114,10 @@ public class Game extends Window implements KeyListener {
         add(scoreLabel);
         add(showScore);
         add(livesLabel);
-        g2D.drawImage(hearts[2], MAX_X - 220 + (150 - hearts[2].getWidth(this))/2, livesLabel.getY() + 50, this);
+        for (int i = 0; i < lives; i++) {
+            g2D.drawImage(heart, MAX_X - 208 + i * heart.getWidth(this), livesLabel.getY() + 50, this);
+        }
+        
     }
     
     void initPacman(){
@@ -369,7 +366,7 @@ public class Game extends Window implements KeyListener {
     
     
     void WriterScore(){
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter("C:\\DoAN OOP\\Java-Pacman\\src\\Score.txt", true))) {  // Chế độ append
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("src\\Score.txt", true))) {  // Chế độ append
             writer.write(namePlayer + "," + score);  // Ghi tên và điểm số
             writer.newLine();  // Xuống dòng
         } catch (IOException e) {

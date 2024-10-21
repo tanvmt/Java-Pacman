@@ -221,7 +221,7 @@ class MainPanel extends Window implements ActionListener {
             setLayout(null);
             setBackground(Color.BLACK);
             backButton = createButton("BACK", MAX_X / 2 - 200, MAX_Y / 2 + 250, 400, 50, MainPanel.this);
-            String textScore = "C:\\DoAN OOP\\Java-Pacman\\src\\Score.txt";
+            String textScore = "src\\Score.txt";
             scoresArea = createTextArea(textScore, MAX_X / 2 - 300,
                     MAX_Y / 2 - 100);
             this.add(backButton);
