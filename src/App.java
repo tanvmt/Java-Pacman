@@ -274,7 +274,7 @@ class MainPanel extends Window implements ActionListener {
         Object source = e.getSource();
         if (source == menu.menuButtons[3])
             System.exit(0);
-        if (source == menu.menuButtons[0]) {
+        else if (source == menu.menuButtons[0]) {
             game.resetGame();
             
             game.setNamePlayer();
@@ -282,12 +282,13 @@ class MainPanel extends Window implements ActionListener {
             cl.show(this, "Game");
             game.timer.start();
         }
-        if (source == menu.menuButtons[1])
+        else if (source == menu.menuButtons[1])
             cl.show(this, "Instructions");
-        if (source == menu.menuButtons[2])
-
+        else if (source == menu.menuButtons[2]){
+            highscores.scoresArea.setText(readFileScore("src\\Score.txt"));
             cl.show(this, "Highscores");
-        if (source == instructions.backButton || source == highscores.backButton)
+        }  
+        else if (source == instructions.backButton || source == highscores.backButton)
             cl.first(this);
     }
 }
