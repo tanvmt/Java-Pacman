@@ -8,9 +8,6 @@ public class Pacman {
     private int dPacmanX,dPacmanY;
     
     
-    
-    
-    
     public Pacman(int pacManX,int pacManY,int dPacmanX,int dPacmanY){
         this.pacManX = pacManX;
         this.pacManY = pacManY;

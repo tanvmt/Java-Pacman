@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 
 class Window extends JPanel {
     protected final int MAX_X = 1366;
@@ -36,6 +37,34 @@ class Window extends JPanel {
         label.setBounds(x, y, 150, 50);
         label.setHorizontalAlignment(SwingConstants.CENTER);
         return label;
+    }
+
+    
+    public String readFileScore(String filePath) {
+        ArrayList<Player> players = new ArrayList<>();
+        
+        String name;
+        int diem;
+        try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
+            String line = br.readLine();
+            while (line != null) {
+                String[] value = line.split(",");
+                name = value[0];
+                diem = Integer.parseInt(value[1]); 
+                players.add(new Player(name, diem));
+                
+                line = br.readLine();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        // sx diem giam dan
+        players.sort((p1, p2) -> Integer.compare(p2.getScore(), p1.getScore()));
+        StringBuilder content = new StringBuilder();
+        for (Player player : players) {
+            content.append(player.getNamePlayer()).append(" ").append(player.getScore()).append("\n");
+        }
+        return content.toString();
     }
 }
 
@@ -188,17 +217,18 @@ class MainPanel extends Window implements ActionListener {
         JButton backButton;
         JTextArea scoresArea;
 
-        Highscores() {
+        public Highscores() {
             setLayout(null);
             setBackground(Color.BLACK);
             backButton = createButton("BACK", MAX_X / 2 - 200, MAX_Y / 2 + 250, 400, 50, MainPanel.this);
-            scoresArea = createTextArea("1. Player A: 1000\n2. Player B: 900\n3. Player C: 800", MAX_X / 2 - 300,
+            String textScore = "C:\\DoAN OOP\\Java-Pacman\\src\\Score.txt";
+            scoresArea = createTextArea(textScore, MAX_X / 2 - 300,
                     MAX_Y / 2 - 100);
             this.add(backButton);
             this.add(scoresArea);
         }
 
-        private JTextArea createTextArea(String text, int x, int y) {
+        public JTextArea createTextArea(String text, int x, int y) {
             JTextArea area = new JTextArea(text, 10, 50);
             area.setBounds(x, y, 600, 300);
             area.setForeground(Color.RED);
@@ -207,9 +237,30 @@ class MainPanel extends Window implements ActionListener {
             area.setWrapStyleWord(true);
             area.setEditable(false);
             area.setOpaque(false);
+            String content = readFileScore(text);
+            area.setText(content);
+            // updateScores();
             return area;
         }
 
+        // public String readFileScore(String filePath) {
+        //     StringBuilder content =  new StringBuilder();
+        //     String name,diem;
+        //     try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
+        //         String line = br.readLine();
+        //         while (line != null) {
+        //             String[] value = line.split(",");
+        //             name = value[0];
+        //             diem = value[1];
+        //             content.append(name).append(" ").append(diem).append("\n");
+                    
+        //             line = br.readLine();
+        //         }
+        //     } catch (IOException e) {
+        //         e.printStackTrace();
+        //     }
+        //     return content.toString();
+        // }
 
         @Override
         public void paintComponent(Graphics g) {
@@ -225,12 +276,16 @@ class MainPanel extends Window implements ActionListener {
             System.exit(0);
         if (source == menu.menuButtons[0]) {
             game.resetGame();
+            
+            game.setNamePlayer();
+            
             cl.show(this, "Game");
             game.timer.start();
         }
         if (source == menu.menuButtons[1])
             cl.show(this, "Instructions");
         if (source == menu.menuButtons[2])
+
             cl.show(this, "Highscores");
         if (source == instructions.backButton || source == highscores.backButton)
             cl.first(this);

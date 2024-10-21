@@ -7,6 +7,12 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 import javax.swing.*;
+import javax.swing.border.LineBorder;
+
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+
 
 public class Game extends Window implements KeyListener {
     private JButton backButton;
@@ -22,9 +28,13 @@ public class Game extends Window implements KeyListener {
     private int score = 0;
     private boolean inGame = true;
     private Image up, down, left, right, basic;
+    private int lives = 3;
+
+    private String namePlayer;
 
     private JLabel scoreLabel, showScore, livesLabel, move, pause, resume, levelLabel, showLevel;
     private Image arrowKeys, spaceKey, escKey, hearts[];
+    MyFrame tmpMyFrame;
    
     Game() {
 
@@ -51,8 +61,15 @@ public class Game extends Window implements KeyListener {
     
     private void returnToMenu() {
         timer.stop();  // Stop the game timer when returning to the menu
+        
         CardLayout cl = (CardLayout) getParent().getLayout();
+        // cl.show(getParent(), "Highscores");
+
         cl.show(getParent(), "Menu");  // Switch back to the menu in MainPanel
+    }
+    public void newMenu(){
+        this.removeAll();
+        tmpMyFrame = new MyFrame();
     }
     
     public void loadImage() {
@@ -155,6 +172,10 @@ public class Game extends Window implements KeyListener {
                     pacman.setdPacmanX(req_dx);
                     pacman.setdPacmanY(req_dy);
                 }
+                else{
+                    pacman.setdPacmanX(0);
+                    pacman.setdPacmanY(0);
+                }
             }
             if ((pacmand_x == -1 && pacmand_y == 0 && (ch & 1) != 0)
                     || (pacmand_x == 1 && pacmand_y == 0 && (ch & 4) != 0)
@@ -164,8 +185,8 @@ public class Game extends Window implements KeyListener {
                 pacman.setdPacmanY(0);
             }
         }
-
-          pacman.move();
+        
+        pacman.move();
         
     }
     
@@ -175,7 +196,9 @@ public class Game extends Window implements KeyListener {
         dy = new int[4];
         timer = new Timer(40, e -> this.updateGame());
 
-        backButton = createButton("BACK", 0, 0, 150, 50, e -> returnToMenu());
+        backButton = createButton("BACK", 0, 0, 150, 50, e -> {
+            WriterScore();
+            returnToMenu();});
 
         move = createLabel("MOVE", 75, 150);
         pause = createLabel("PAUSE", 75, move.getY() + move.getHeight() + 150);
@@ -268,9 +291,94 @@ public class Game extends Window implements KeyListener {
 
             }
             ghost[i].move();
+            if (pacman.getPacManX() > (ghost_x - 14) && pacman.getPacManX() < (ghost_x + 14)
+                    && pacman.getPacManY() > (ghost_y - 14) && pacman.getPacManY() < (ghost_y + 14)
+                    ) {
+                this.lives -= 1;        
+                timer.stop();
+                checkLives();
+                initPacman();
+            }
         }
 
     }
+
+    
+
+    void setNamePlayer(){
+
+        UIManager.put("OptionPane.background", Color.WHITE);
+        UIManager.put("Panel.background", Color.WHITE);
+        UIManager.put("Button.background", Color.WHITE);
+        // UIManager.put("TextField.background", Color.WHITE);
+        UIManager.put("Label.background", Color.WHITE);
+
+        JLabel inputFrame = new JLabel("PLAYER'S NAME");
+        inputFrame.setFont(new Font("Arial", Font.BOLD, 18));
+        inputFrame.setForeground(Color.RED);  // Đổi màu chữ
+
+        JTextField textNamePlayer = new JTextField(20);
+
+        JPanel inputFrameBK = new JPanel();
+        inputFrameBK.setBackground(Color.WHITE);
+        inputFrameBK.add(inputFrame);
+        inputFrameBK.add(textNamePlayer);
+        inputFrameBK.setBorder(new LineBorder(Color.WHITE, 10)); 
+
+        int result = JOptionPane.showConfirmDialog(null, inputFrameBK, 
+            "INPUT NAME", JOptionPane.OK_CANCEL_OPTION);
+        
+            if (result == JOptionPane.OK_OPTION) {
+                this.namePlayer = textNamePlayer.getText();
+            } else {
+                this.namePlayer = "";
+            }
+    }
+    void setNamePlayer(String name){
+        this.namePlayer = name; 
+    }
+    String getNamePlayer(){
+        return this.namePlayer;
+    }
+
+    int getScore(){
+        return this.score;
+    }
+
+    void checkLives(){
+        if(lives == 0){
+            announcement();
+            System.out.println(namePlayer+ " " +score);
+            WriterScore();
+            // returnToMenu();
+            newMenu();
+        }
+    }
+
+    void announcement() {
+        JLabel condition = new JLabel("You Lose");
+        JLabel condition2 = new JLabel("Score: " + score);  // Hiển thị điểm số
+    
+        JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS)); // Đặt layout cho panel
+        panel.add(condition);
+        panel.add(condition2);
+    
+        JOptionPane.showMessageDialog(null, panel, "Announcement", JOptionPane.INFORMATION_MESSAGE);
+    }
+    
+    
+    void WriterScore(){
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("C:\\DoAN OOP\\Java-Pacman\\src\\Score.txt", true))) {  // Chế độ append
+            writer.write(namePlayer + "," + score);  // Ghi tên và điểm số
+            writer.newLine();  // Xuống dòng
+        } catch (IOException e) {
+            System.out.println("Error writing to file: " + e.getMessage());
+        }
+    }
+    
+
+
 
     void resetGame() {
         score = 0;
@@ -357,14 +465,20 @@ public void keyPressed(KeyEvent e) {
             req_dy = 0;
             break;
         case KeyEvent.VK_UP:
-            System.out.println("upppppppppppp");
+            
             req_dx = 0;
             req_dy = -1;
-            System.out.println(req_dx +" va " + req_dy);
+            
             break;
         case KeyEvent.VK_DOWN:
             req_dx = 0;
             req_dy = 1;
+            break;
+        case KeyEvent.VK_ESCAPE:
+            timer.stop();
+            break;
+        case KeyEvent.VK_SPACE:
+            timer.start();
             break;
     }
 }
