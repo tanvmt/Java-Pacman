@@ -300,36 +300,34 @@ public class Game extends Window implements KeyListener {
 
     }
 
-    
-
-    void setNamePlayer(){
-
+    void setNamePlayer() {
         UIManager.put("OptionPane.background", Color.WHITE);
         UIManager.put("Panel.background", Color.WHITE);
         UIManager.put("Button.background", Color.WHITE);
-        // UIManager.put("TextField.background", Color.WHITE);
         UIManager.put("Label.background", Color.WHITE);
-
+    
         JLabel inputFrame = new JLabel("PLAYER'S NAME");
         inputFrame.setFont(new Font("Arial", Font.BOLD, 18));
         inputFrame.setForeground(Color.RED);  // Đổi màu chữ
-
+    
         JTextField textNamePlayer = new JTextField(20);
-
+    
         JPanel inputFrameBK = new JPanel();
         inputFrameBK.setBackground(Color.WHITE);
         inputFrameBK.add(inputFrame);
         inputFrameBK.add(textNamePlayer);
         inputFrameBK.setBorder(new LineBorder(Color.WHITE, 10)); 
-
+    
         int result = JOptionPane.showConfirmDialog(null, inputFrameBK, 
             "INPUT NAME", JOptionPane.OK_CANCEL_OPTION);
         
-            if (result == JOptionPane.OK_OPTION) {
-                this.namePlayer = textNamePlayer.getText();
-            } else {
-                this.namePlayer = "";
-            }
+        // Xử lý kết quả
+        if (result == JOptionPane.OK_OPTION) {
+            this.namePlayer = textNamePlayer.getText(); // Lưu tên người chơi nếu OK được nhấn
+        } 
+        else{
+            returnToMenu();
+        }
     }
     void setNamePlayer(String name){
         this.namePlayer = name; 

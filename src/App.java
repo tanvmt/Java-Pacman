@@ -1,10 +1,16 @@
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+
 
 class Window extends JPanel {
     protected final int MAX_X = 1366;
@@ -40,31 +46,31 @@ class Window extends JPanel {
     }
 
     
-    public String readFileScore(String filePath) {
-        ArrayList<Player> players = new ArrayList<>();
-        
-        String name;
-        int diem;
+    public List<String[]> readFileScoreV2(String filePath) {
+        List<String[]> dataList = new ArrayList<>();
         try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
             String line = br.readLine();
+            
             while (line != null) {
                 String[] value = line.split(",");
-                name = value[0];
-                diem = Integer.parseInt(value[1]); 
-                players.add(new Player(name, diem));
-                
+                dataList.add(value);  // Thêm mảng [name, score] vào danh sách
                 line = br.readLine();
+            
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
-        // sx diem giam dan
-        players.sort((p1, p2) -> Integer.compare(p2.getScore(), p1.getScore()));
-        StringBuilder content = new StringBuilder();
-        for (Player player : players) {
-            content.append(player.getNamePlayer()).append(" ").append(player.getScore()).append("\n");
-        }
-        return content.toString();
+        Collections.sort(dataList, new Comparator<String[]>() {
+            @Override
+            public int compare(String[] o1, String[] o2) {
+                // Chuyển điểm từ String sang Double để so sánh
+                double score1 = Double.parseDouble(o1[1]);
+                double score2 = Double.parseDouble(o2[1]);
+                return Double.compare(score2, score1); // Sắp xếp giảm dần
+            }
+        });
+
+        return dataList;
     }
 }
 
@@ -216,58 +222,87 @@ class MainPanel extends Window implements ActionListener {
     class Highscores extends Window {
         JButton backButton;
         JTextArea scoresArea;
+        DefaultTableModel model;
+        JTable table;
 
         public Highscores() {
+            // setLayout(null);
+            // setBackground(Color.BLACK);
+            // backButton = createButton("BACK", MAX_X / 2 - 200, MAX_Y / 2 + 250, 400, 50, MainPanel.this);
+            // String textScore = "src\\Score.txt";
+            // scoresArea = createTextArea(textScore, MAX_X / 2 - 300,
+            //         MAX_Y / 2 - 100);
+            // this.add(backButton);
+            // this.add(scoresArea);
             setLayout(null);
             setBackground(Color.BLACK);
             backButton = createButton("BACK", MAX_X / 2 - 200, MAX_Y / 2 + 250, 400, 50, MainPanel.this);
-            String textScore = "src\\Score.txt";
-            scoresArea = createTextArea(textScore, MAX_X / 2 - 300,
-                    MAX_Y / 2 - 100);
             this.add(backButton);
-            this.add(scoresArea);
+            
+            createTable();  // Tạo và hiển thị bảng điểm cao
         }
 
-        public JTextArea createTextArea(String text, int x, int y) {
-            JTextArea area = new JTextArea(text, 10, 50);
-            area.setBounds(x, y, 600, 300);
-            area.setForeground(Color.RED);
-            area.setFont(new Font("Arial", Font.BOLD, 20));
-            area.setLineWrap(true);
-            area.setWrapStyleWord(true);
-            area.setEditable(false);
-            area.setOpaque(false);
-            String content = readFileScore(text);
-            area.setText(content);
-            // updateScores();
-            return area;
-        }
+        // public JTextArea createTextArea(String text, int x, int y) {
+        //     JTextArea area = new JTextArea(text, 10, 50);
+        //     area.setBounds(x, y, 600, 300);
+        //     area.setForeground(Color.RED);
+        //     area.setFont(new Font("Arial", Font.BOLD, 20));
+        //     area.setLineWrap(true);
+        //     area.setWrapStyleWord(true);
+        //     area.setEditable(false);
+        //     area.setOpaque(false);
+        //     String content = readFileScore(text);
+        //     area.setText(content);
+            
+        //     return area;
 
-        // public String readFileScore(String filePath) {
-        //     StringBuilder content =  new StringBuilder();
-        //     String name,diem;
-        //     try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
-        //         String line = br.readLine();
-        //         while (line != null) {
-        //             String[] value = line.split(",");
-        //             name = value[0];
-        //             diem = value[1];
-        //             content.append(name).append(" ").append(diem).append("\n");
-                    
-        //             line = br.readLine();
-        //         }
-        //     } catch (IOException e) {
-        //         e.printStackTrace();
-        //     }
-        //     return content.toString();
         // }
+        public void createTable(){
+            String[] colHightScore = {"Top","Name","Score"};
+            // model = new DefaultTableModel(colHightScore,0);
+            model = new DefaultTableModel(colHightScore, 0) {
+                @Override
+                public boolean isCellEditable(int row, int column) {
+                    // Trả về false để tất cả các ô đều không chỉnh sửa được
+                    return false;
+                }
+            };
+            table = new JTable(model);
+            updateTable();
+            table.setFillsViewportHeight(true);
+            table.setRowHeight(30); // Chiều cao của mỗi hàng
+            table.setBackground(Color.BLACK);   // Màu nền bảng
+            table.setForeground(Color.WHITE); // Màu chữ bảng
+            table.getTableHeader().setBackground(Color.GRAY);  // Màu nền tiêu đề cột
+            table.getTableHeader().setForeground(Color.WHITE); // Màu chữ tiêu đề cột
+            
+            // Tùy chỉnh bảng (font, màu sắc)
+            table.setFont(new Font("Arial", Font.PLAIN, 18));
+            JScrollPane scrollPane = new JScrollPane(table);
+            // Thêm bảng trực tiếp vào panel thay vì JScrollPane
+            scrollPane.setBounds(390,300,600,330);
+            this.add(scrollPane);
+        }
 
+        public void updateTable() {
+            DefaultTableModel model = (DefaultTableModel) table.getModel();
+            model.setRowCount(0); // Xóa tất cả các hàng hiện tại trong bảng
+    
+            List<String[]> scoreData = readFileScoreV2("src\\Score.txt");
+    
+            for (int i = 0; i < scoreData.size(); i++) {
+                String[] data = scoreData.get(i);
+                model.addRow(new Object[]{i + 1, data[0], data[1]});
+            }
+        }
+        
         @Override
         public void paintComponent(Graphics g) {
             super.paintComponent(g);
             drawLogo((Graphics2D) g);
         }
     }
+
 
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -276,16 +311,21 @@ class MainPanel extends Window implements ActionListener {
             System.exit(0);
         else if (source == menu.menuButtons[0]) {
             game.resetGame();
-            
             game.setNamePlayer();
-            
-            cl.show(this, "Game");
-            game.timer.start();
+            if(game.getNamePlayer() == null){
+                cl.show(this, "Menu");
+            }
+            else{
+                cl.show(this, "Game");
+                game.timer.start();
+            }
         }
         else if (source == menu.menuButtons[1])
             cl.show(this, "Instructions");
         else if (source == menu.menuButtons[2]){
-            highscores.scoresArea.setText(readFileScore("src\\Score.txt"));
+            // readFileScoreV2("src\\Score.txt");
+            // highscores.createTable();
+            highscores.updateTable();
             cl.show(this, "Highscores");
         }  
         else if (source == instructions.backButton || source == highscores.backButton)
