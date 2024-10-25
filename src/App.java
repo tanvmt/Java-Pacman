@@ -11,17 +11,13 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-
 class Window extends JPanel {
     protected final int MAX_X = 1366;
     protected final int MAX_Y = 768;
     protected final int BLOCK_SIZE = 24;
     protected final int N_BLOCKS = 31;
     protected final int SCREEN_SIZE = N_BLOCKS * BLOCK_SIZE;
-    protected short[] screenData;
-
-
-    
+    protected short[] screenData; 
     
     protected JButton createButton(String text, int x, int y, int width, int height, ActionListener listener) {
         JButton button = new JButton(text);
@@ -45,7 +41,6 @@ class Window extends JPanel {
         return label;
     }
 
-    
     public List<String[]> readFileScoreV2(String filePath) {
         List<String[]> dataList = new ArrayList<>();
         try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
@@ -104,8 +99,6 @@ class MainPanel extends Window implements ActionListener {
         this.add("Game", game);
     }
 
-    
-
     private void loadImages() {
         logo = new ImageIcon("src/Image/logo.png").getImage();
         icon1 = new ImageIcon("src/Image/menu_icon.png").getImage();
@@ -119,8 +112,6 @@ class MainPanel extends Window implements ActionListener {
         g2D.drawImage(icon2, 1296, 0, this);
         g2D.drawImage(icon2, 1296, 676, this);
     }
-
-    
 
     @Override
     public void paintComponent(Graphics g) {
@@ -141,14 +132,12 @@ class MainPanel extends Window implements ActionListener {
         private void initButtons() {
             String[] labels = { "PLAY", "INSTRUCTIONS", "HIGHSCORES", "QUIT" };
             for (int i = 0; i < 4; i++) {
-                menuButtons[i] = createButton(labels[i], MAX_X / 2 - 200, MAX_Y / 2 - 50 + 100 * i, 400, 50, MainPanel.this);
+                menuButtons[i] = createButton(labels[i], MAX_X / 2 - 200, MAX_Y / 2 - 50 + 100 * i, 400, 50,
+                        MainPanel.this);
                 this.add(menuButtons[i]);
             }
         }
-
         
-        
-
         @Override
         public void paintComponent(Graphics g) {
             super.paintComponent(g);
@@ -158,7 +147,6 @@ class MainPanel extends Window implements ActionListener {
 
     class Instructions extends Window {
         JButton backButton;
-        // JTextArea instructionsArea;
         JScrollPane instructionsArea;
         private JTextArea textArea;
 
@@ -184,11 +172,9 @@ class MainPanel extends Window implements ActionListener {
             area.setWrapStyleWord(true);
             area.setEditable(false);
             area.setOpaque(false);
-            // JScrollPane scrollPane = new JScrollPane(area);
-            // add(scrollPane);
             String content = readFile(text);
             area.setText(content);
-            // return area;
+
 
             JScrollPane scrollPane = new JScrollPane(area);
             scrollPane.setBounds(x - 200, y - 200, 1000, 500); // Thiết lập vị trí và kích thước
@@ -226,14 +212,6 @@ class MainPanel extends Window implements ActionListener {
         JTable table;
 
         public Highscores() {
-            // setLayout(null);
-            // setBackground(Color.BLACK);
-            // backButton = createButton("BACK", MAX_X / 2 - 200, MAX_Y / 2 + 250, 400, 50, MainPanel.this);
-            // String textScore = "src\\Score.txt";
-            // scoresArea = createTextArea(textScore, MAX_X / 2 - 300,
-            //         MAX_Y / 2 - 100);
-            // this.add(backButton);
-            // this.add(scoresArea);
             setLayout(null);
             setBackground(Color.BLACK);
             backButton = createButton("BACK", MAX_X / 2 - 200, MAX_Y / 2 + 250, 400, 50, MainPanel.this);
@@ -242,21 +220,6 @@ class MainPanel extends Window implements ActionListener {
             createTable();  // Tạo và hiển thị bảng điểm cao
         }
 
-        // public JTextArea createTextArea(String text, int x, int y) {
-        //     JTextArea area = new JTextArea(text, 10, 50);
-        //     area.setBounds(x, y, 600, 300);
-        //     area.setForeground(Color.RED);
-        //     area.setFont(new Font("Arial", Font.BOLD, 20));
-        //     area.setLineWrap(true);
-        //     area.setWrapStyleWord(true);
-        //     area.setEditable(false);
-        //     area.setOpaque(false);
-        //     String content = readFileScore(text);
-        //     area.setText(content);
-            
-        //     return area;
-
-        // }
         public void createTable(){
             String[] colHightScore = {"Top","Name","Score"};
             // model = new DefaultTableModel(colHightScore,0);
@@ -303,7 +266,6 @@ class MainPanel extends Window implements ActionListener {
         }
     }
 
-
     @Override
     public void actionPerformed(ActionEvent e) {
         Object source = e.getSource();
@@ -323,8 +285,6 @@ class MainPanel extends Window implements ActionListener {
         else if (source == menu.menuButtons[1])
             cl.show(this, "Instructions");
         else if (source == menu.menuButtons[2]){
-            // readFileScoreV2("src\\Score.txt");
-            // highscores.createTable();
             highscores.updateTable();
             cl.show(this, "Highscores");
         }  
@@ -335,11 +295,6 @@ class MainPanel extends Window implements ActionListener {
 
 class MyFrame extends JFrame
 {
-    private enum State {
-        MENU,
-        GAME;
-    }
-
     MainPanel mainPanel;
 
     MyFrame()
@@ -359,6 +314,7 @@ class MyFrame extends JFrame
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setVisible(true);
+        setResizable(false);
     }
 
 }
