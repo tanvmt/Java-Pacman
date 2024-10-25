@@ -19,9 +19,8 @@ public class Game extends Window implements KeyListener {
     private Ghost[] ghost;
     private Level level;
     public Timer timer, frightenedGhostTimer;
-    int[] dx, dy;
+    private int[] dx, dy;
     private int ghost_x, ghost_y, ghost_dx, ghost_dy;
-    private int count;
     
     private Pacman pacman;
     private int req_dx,req_dy;
@@ -209,12 +208,12 @@ public class Game extends Window implements KeyListener {
 
     }
 
-    void initGhosts() {// vị tris ghost
+    void initGhosts() {
         ghost = new Ghost[4];
-        ghost[0] = new Ghost((MAX_X - SCREEN_SIZE) / 2 + 5, 5, Color.RED, 4, 0, 0);
-        ghost[1] = new Ghost((MAX_X - SCREEN_SIZE) / 2 + 5, 5 + BLOCK_SIZE * 30, Color.RED, 4, 0, 0);
-        ghost[2] = new Ghost((MAX_X - SCREEN_SIZE) / 2 + 5 + BLOCK_SIZE * 30, 5, Color.RED, 4, 0, 0);
-        ghost[3] = new Ghost((MAX_X - SCREEN_SIZE) / 2 + 5 + BLOCK_SIZE * 30, 5 + BLOCK_SIZE * 30, Color.RED, 4, 0, 0);
+        ghost[0] = new Ghost((MAX_X - SCREEN_SIZE) / 2 + 5, 5, 4, 0, 0, 100);
+        ghost[1] = new Ghost((MAX_X - SCREEN_SIZE) / 2 + 5, 5 + BLOCK_SIZE * 30, 4, 0, 0, 100);
+        ghost[2] = new Ghost((MAX_X - SCREEN_SIZE) / 2 + 5 + BLOCK_SIZE * 30, 5, 4, 0, 0, 100);
+        ghost[3] = new Ghost((MAX_X - SCREEN_SIZE) / 2 + 5 + BLOCK_SIZE * 30, 5 + BLOCK_SIZE * 30, 4, 0, 0, 100);
     }
 
     void initLevel() {
@@ -224,7 +223,9 @@ public class Game extends Window implements KeyListener {
 
     void drawGhosts(Graphics2D g2D) {
         for (int i = 0; i < 4; i++) {
-            g2D.drawImage(ghost[i].defaultIcon, ghost[i].getX(), ghost[i].getY(), this);
+            g2D.drawImage(ghost[i].getDefaultIcon(), ghost[i].getX(), ghost[i].getY(), this);
+            g2D.setStroke(new BasicStroke(1));
+            g2D.drawOval(ghost[i].getX() - 96, ghost[i].getY() - 95, 200, 200);
         }
         
     }
@@ -238,34 +239,59 @@ public class Game extends Window implements KeyListener {
             int pos = 0;
             int count = 0;
 
+            int distanceToPacman = (int) Math.sqrt(Math.pow(ghost_x - pacman.getPacManX(), 2) + Math.pow(ghost_y - pacman.getPacManY(), 2));
+
             if ((ghost_x - 4) % BLOCK_SIZE == 0 && (ghost_y - 5) % BLOCK_SIZE == 0) {
                 pos = (ghost_x - 4 + N_BLOCKS * (ghost_y - 5) - (MAX_X - SCREEN_SIZE) / 2) / BLOCK_SIZE;
-
+                
+                // Check left border
                 if ((screenData[pos] & 1) == 0 && ghost_dx != 1) {
                     dx[count] = -1;
                     dy[count] = 0;
                     count++;
                 }
 
+                // Check top border
                 if ((screenData[pos] & 2) == 0 && ghost_dy != 1) {
                     dx[count] = 0;
                     dy[count] = -1;
                     count++;
                 }
 
+                // Check right border
                 if ((screenData[pos] & 4) == 0 && ghost_dx != -1) {
                     dx[count] = 1;
                     dy[count] = 0;
                     count++;
                 }
 
+                // Check down border
                 if ((screenData[pos] & 8) == 0 && ghost_dy != -1) {
                     dx[count] = 0;
                     dy[count] = 1;
                     count++;
                 }
 
-                if (count == 0) {
+                // Chasing Pacman upon detection
+                if (distanceToPacman <= ghost[i].getDetection_radius()) {
+                    int minDistance = Integer.MAX_VALUE;
+                    int bestDx = 0, bestDy = 0;
+                    for (int j = 0; j < count; j++) {
+                        int newGhostX = ghost_x + dx[j] * BLOCK_SIZE;
+                        int newGhostY = ghost_y + dy[j] * BLOCK_SIZE;
+
+                        int distance = (int) Math.sqrt(Math.pow(newGhostX - pacman.getPacManX(), 2)
+                                + Math.pow(newGhostY - pacman.getPacManY(), 2));
+
+                        if (distance < minDistance) {
+                            minDistance = distance;
+                            bestDx = dx[j];
+                            bestDy = dy[j];
+                        }
+                    }
+                    ghost[i].setDirection(bestDx, bestDy);
+                }
+                else if (count == 0) { // Avoid stuck
                     if ((screenData[pos] & 15) == 15) {
                         ghost_dx = 0;
                         ghost_dy = 0;
@@ -273,7 +299,7 @@ public class Game extends Window implements KeyListener {
                         ghost_dx = -ghost_dx;
                         ghost_dy = -ghost_dy;
                     }
-                } else {
+                } else { // Random direction
                     count = (int) (Math.random() * count);
 
                     if (count > 3) {
@@ -288,6 +314,8 @@ public class Game extends Window implements KeyListener {
 
             }
             ghost[i].move();
+            
+            // Check collision with Pacman
             if (pacman.getPacManX() > (ghost_x - 14) && pacman.getPacManX() < (ghost_x + 14)
                     && pacman.getPacManY() > (ghost_y - 14) && pacman.getPacManY() < (ghost_y + 14)
                     ) {
@@ -295,6 +323,7 @@ public class Game extends Window implements KeyListener {
                 timer.stop();
                 checkLives();
                 initPacman();
+                initGhosts();
             }
         }
 
@@ -361,8 +390,7 @@ public class Game extends Window implements KeyListener {
     
         JOptionPane.showMessageDialog(null, panel, "Announcement", JOptionPane.INFORMATION_MESSAGE);
     }
-    
-    
+      
     void WriterScore(){
         try (BufferedWriter writer = new BufferedWriter(new FileWriter("src\\Score.txt", true))) {  // Chế độ append
             writer.write(namePlayer + "," + score);  // Ghi tên và điểm số
@@ -371,9 +399,6 @@ public class Game extends Window implements KeyListener {
             System.out.println("Error writing to file: " + e.getMessage());
         }
     }
-    
-
-
 
     void resetGame() {
         score = 0;
@@ -383,7 +408,6 @@ public class Game extends Window implements KeyListener {
         initPacman();
 
     }
-
 
     @Override
     protected void paintComponent(Graphics g) {
@@ -404,40 +428,6 @@ public class Game extends Window implements KeyListener {
         moveGhosts();
         repaint();
     }
-    
-    //controls
-//    class TAdapter extends KeyAdapter {
-//
-//        @Override
-//        public void keyPressed(KeyEvent e) {
-//
-//            int key = e.getKeyCode();
-//            inGame = true;
-//            if (inGame) {
-//                System.out.println("333333333333333");
-//                if (key == KeyEvent.VK_LEFT) {
-//                    req_dx = -1;
-//                    req_dy = 0;
-//                } else if (key == KeyEvent.VK_RIGHT) {
-//                    req_dx = 1;
-//                    req_dy = 0;
-//                } else if (key == KeyEvent.VK_UP) {
-//                    req_dx = 0;
-//                    req_dy = -1;
-//                } else if (key == KeyEvent.VK_DOWN) {
-//                    req_dx = 0;
-//                    req_dy = 1;
-//                } else if (key == KeyEvent.VK_ESCAPE && timer.isRunning()) {
-//                    inGame = false;
-//                } 
-//            } else {
-//                if (key == KeyEvent.VK_SPACE) {
-//                    inGame = true;
-//                }
-//           }
-//        }
-//}
-
 
     @Override
     public void keyTyped(KeyEvent e) {

@@ -1,4 +1,3 @@
-import javax.swing.*;
 import java.awt.*;
 
 class Level extends Window{

@@ -1,7 +1,4 @@
 
-import java.awt.Image;
-import javax.swing.ImageIcon;
-
 public class Pacman {
     private int pacManX,pacManY;
     private int speed = 6;
