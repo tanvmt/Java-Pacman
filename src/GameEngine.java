@@ -13,8 +13,8 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 
-
-public class GameEngine extends Window implements KeyListener {
+//implements KeyListener
+public class GameEngine extends Window {
     private GamePanel gamePanel;
     private JButton backButton;
     private Ghost[] ghost;
@@ -49,7 +49,8 @@ public class GameEngine extends Window implements KeyListener {
         initPacman();
         System.out.println("11111111111111");
         setFocusable(true);
-        addKeyListener(this);
+        // addKeyListener(this);
+        addKeyListener(new TAdapter());
         System.out.println("22222222222222");
 
         addComponentListener(new java.awt.event.ComponentAdapter() {
@@ -427,12 +428,15 @@ public class GameEngine extends Window implements KeyListener {
     }
 
     void resetGame() {
+        this.showScore=null;
+        this.lives = 3;
         score = 0;
         initVariables();
         initLevel();
         initGhosts();
         initPacman();
-
+        setNamePlayer(null);
+        setNamePlayer();
     }
 
     @Override
@@ -455,50 +459,88 @@ public class GameEngine extends Window implements KeyListener {
         repaint();
     }
 
-    @Override
-    public void keyTyped(KeyEvent e) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
-    @Override
-public void keyPressed(KeyEvent e) {
-    int key = e.getKeyCode();
-    System.out.println("Key Pressed: " + key); // In ra phím đã nhấn
-    inGame = true;
-
-    switch(key) {
-        case KeyEvent.VK_LEFT:
-            req_dx = -1;
-            req_dy = 0;
-            break;
-        case KeyEvent.VK_RIGHT:
-            req_dx = 1;
-            req_dy = 0;
-            break;
-        case KeyEvent.VK_UP:
-            
-            req_dx = 0;
-            req_dy = -1;
-            
-            break;
-        case KeyEvent.VK_DOWN:
-            req_dx = 0;
-            req_dy = 1;
-            break;
-        case KeyEvent.VK_ESCAPE:
-            timer.stop();
-            break;
-        case KeyEvent.VK_SPACE:
-            timer.start();
-            break;
-    }
+    class TAdapter extends KeyAdapter {
+        @Override
+        public void keyPressed(KeyEvent e) {
+            int key = e.getKeyCode();
+            System.out.println("Key Pressed: " + key); // In ra phím đã nhấn
+            inGame = true;
+        
+            switch(key) {
+                case KeyEvent.VK_LEFT:
+                    req_dx = -1;
+                    req_dy = 0;
+                    break;
+                case KeyEvent.VK_RIGHT:
+                    req_dx = 1;
+                    req_dy = 0;
+                    break;
+                case KeyEvent.VK_UP:
+                    
+                    req_dx = 0;
+                    req_dy = -1;
+                    
+                    break;
+                case KeyEvent.VK_DOWN:
+                    req_dx = 0;
+                    req_dy = 1;
+                    break;
+                case KeyEvent.VK_ESCAPE:
+                    timer.stop();
+                    break;
+                case KeyEvent.VK_SPACE:
+                    timer.start();
+                    break;
+            }
+        }
 }
 
 
 
-    @Override
-    public void keyReleased(KeyEvent e) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
+//     @Override
+//     public void keyTyped(KeyEvent e) {
+//         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+//     }
+
+//     @Override
+// public void keyPressed(KeyEvent e) {
+//     int key = e.getKeyCode();
+//     System.out.println("Key Pressed: " + key); // In ra phím đã nhấn
+//     inGame = true;
+
+//     switch(key) {
+//         case KeyEvent.VK_LEFT:
+//             req_dx = -1;
+//             req_dy = 0;
+//             break;
+//         case KeyEvent.VK_RIGHT:
+//             req_dx = 1;
+//             req_dy = 0;
+//             break;
+//         case KeyEvent.VK_UP:
+            
+//             req_dx = 0;
+//             req_dy = -1;
+            
+//             break;
+//         case KeyEvent.VK_DOWN:
+//             req_dx = 0;
+//             req_dy = 1;
+//             break;
+//         case KeyEvent.VK_ESCAPE:
+//             timer.stop();
+//             break;
+//         case KeyEvent.VK_SPACE:
+//             timer.start();
+//             break;
+//     }
+// }
+
+
+
+//     @Override
+//     public void keyReleased(KeyEvent e) {
+//         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+//     }
     
 }
