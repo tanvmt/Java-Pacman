@@ -61,6 +61,8 @@ class Level extends Window{
         spawnPacmanY = 5 + BLOCK_SIZE * 14;
 
         maxScore = 1006;
+        // maxScore = 20;
+
         levelData = new short[] { //0 = BLUE, 1 = LEFT BORDER, 2 = TOP BORDER, 4 = RIGHT BORDER, 8 = BOTTOM BORDER, 16 = DOTS
             19, 26, 26, 26, 18, 26, 26, 26, 26, 18, 18, 18, 18, 18, 18, 26, 18, 18, 18, 18, 18, 18, 26, 26, 26, 26, 18, 26, 26, 26, 22,
             21, 00, 00, 00, 21, 00, 00, 00, 00, 17, 16, 16, 16, 16, 20, 00, 17, 16, 16, 16, 16, 20, 00, 00, 00, 00, 21, 00, 00, 00, 21,
@@ -112,6 +114,7 @@ class Level extends Window{
         spawnPacmanY = 5 + BLOCK_SIZE * 5;
 
         maxScore = 328;
+        // maxScore = 15;
 
         levelData = new short[] { //0 = BLUE, 1 = LEFT BORDER, 2 = TOP BORDER, 4 = RIGHT BORDER, 8 = BOTTOM BORDER, 16 = DOTS
             00, 19, 26, 22, 00, 19, 26, 26, 26, 22, 00, 19, 26, 22, 00,
@@ -146,7 +149,7 @@ class Level extends Window{
         spawnPacmanY = 5 + BLOCK_SIZE * 6;
 
         maxScore = 179;
-
+        // maxScore = 10;
         levelData = new short[] { //0 = BLUE, 1 = LEFT BORDER, 2 = TOP BORDER, 4 = RIGHT BORDER, 8 = BOTTOM BORDER, 16 = DOTS
             19, 26, 26, 26, 18, 18, 26, 26, 26, 18, 18, 26, 26, 26, 22,
             21, 00, 00, 00, 17, 20, 00, 00, 00, 17, 20, 00, 00, 00, 21,
