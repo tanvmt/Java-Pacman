@@ -163,23 +163,23 @@ class Level extends Window{
                 g2d.setStroke(new BasicStroke(5));
 
                 if((levelData[i] == 0)){
-                    g2d.fillRect(x+(MAX_X-SCREEN_SIZE)/2, y, BLOCK_SIZE, BLOCK_SIZE);
+                    g2d.fillRect(x, y, BLOCK_SIZE, BLOCK_SIZE);
                 }
                 if((screenData[i] & 1) != 0){
-                    g2d.drawLine(x+(MAX_X-SCREEN_SIZE)/2, y, x+(MAX_X-SCREEN_SIZE)/2, y + BLOCK_SIZE - 1);
+                    g2d.drawLine(x, y, x, y + BLOCK_SIZE - 1);
                 }
                 if((screenData[i] & 2) != 0){
-                    g2d.drawLine(x+(MAX_X-SCREEN_SIZE)/2, y, x+(MAX_X-SCREEN_SIZE)/2 + BLOCK_SIZE - 1, y);
+                    g2d.drawLine(x, y, x + BLOCK_SIZE - 1, y);
                 }
                 if((screenData[i] & 4) != 0){
-                    g2d.drawLine(x+(MAX_X-SCREEN_SIZE)/2 + BLOCK_SIZE - 1, y, x+(MAX_X-SCREEN_SIZE)/2 + BLOCK_SIZE - 1, y + BLOCK_SIZE - 1);
+                    g2d.drawLine(x + BLOCK_SIZE - 1, y, x + BLOCK_SIZE - 1, y + BLOCK_SIZE - 1);
                 }
                 if((screenData[i] & 8) != 0){
-                    g2d.drawLine(x+(MAX_X-SCREEN_SIZE)/2, y + BLOCK_SIZE - 1, x+(MAX_X-SCREEN_SIZE)/2 + BLOCK_SIZE - 1, y + BLOCK_SIZE - 1);
+                    g2d.drawLine(x, y + BLOCK_SIZE - 1, x + BLOCK_SIZE - 1, y + BLOCK_SIZE - 1);
                 }
                 if((screenData[i] & 16) != 0){
                     g2d.setColor(new Color(255, 255,255));
-                    g2d.fillOval(x+(MAX_X-SCREEN_SIZE)/2 + 10, y + 10, 6, 6);
+                    g2d.fillOval(x + 10, y + 10, 6, 6);
 
                 }
                 i++;
