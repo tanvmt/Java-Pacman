@@ -15,8 +15,8 @@ class Window extends JPanel {
     protected final int MAX_X = 1366;
     protected final int MAX_Y = 768;
     protected final int BLOCK_SIZE = 24;
-    protected final int N_BLOCKS = 31;
-    protected final int SCREEN_SIZE = N_BLOCKS * BLOCK_SIZE;
+    protected int N_BLOCKS = 31;
+    protected int SCREEN_SIZE = N_BLOCKS * BLOCK_SIZE;
     protected short[] screenData; 
     
     protected JButton createButton(String text, int x, int y, int width, int height, ActionListener listener) {
@@ -75,7 +75,7 @@ class MainPanel extends Window implements ActionListener {
     Highscores highscores;
     CardLayout cl;
     Image logo, icon1, icon2;
-    Game game;
+    GameEngine gameEngine;
 
     MainPanel() {
         initClasses();
@@ -89,14 +89,14 @@ class MainPanel extends Window implements ActionListener {
         menu = new Menu();
         instructions = new Instructions();
         highscores = new Highscores();
-        game = new Game();
+        gameEngine = new GameEngine();
     }
 
     private void addPanels() {
         this.add("Menu", menu);
         this.add("Instructions", instructions);
         this.add("Highscores", highscores);
-        this.add("Game", game);
+        this.add("GameEngine", gameEngine);
     }
 
     private void loadImages() {
@@ -272,14 +272,14 @@ class MainPanel extends Window implements ActionListener {
         if (source == menu.menuButtons[3])
             System.exit(0);
         else if (source == menu.menuButtons[0]) {
-            game.resetGame();
-            game.setNamePlayer();
-            if(game.getNamePlayer() == null){
+            gameEngine.resetGame();
+            gameEngine.setNamePlayer();
+            if(gameEngine.getNamePlayer() == null){
                 cl.show(this, "Menu");
             }
             else{
-                cl.show(this, "Game");
-                game.timer.start();
+                cl.show(this, "GameEngine");
+                gameEngine.timer.start();
             }
         }
         else if (source == menu.menuButtons[1])
