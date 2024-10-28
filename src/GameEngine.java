@@ -217,17 +217,38 @@ public class GameEngine extends Window {
     }
     
 
+    // void changeNextLevel() {
+    //     // levelCount++;
+    //     // score--;
+    //     showScore.setText(--score + "");
+    //     showLevel.setText(++levelCount + "");
+    //     initLevel();      
+    //     initGhosts();
+    //     initPacman();
+    //     gamePanel.setBounds((MAX_X - SCREEN_SIZE) / 2, (MAX_Y - SCREEN_SIZE - 22) / 2, SCREEN_SIZE, SCREEN_SIZE);
+    //     gamePanel.repaint();
+    //     if(score == 1006){
+
+    //     }
+    // }
+
     void changeNextLevel() {
         // levelCount++;
         // score--;
         showScore.setText(--score + "");
         showLevel.setText(++levelCount + "");
+        if (levelCount > 3) {
+            announcementYouWin();
+            WriterScore();
+            returnToMenu();
+        }
         initLevel();      
         initGhosts();
         initPacman();
         gamePanel.setBounds((MAX_X - SCREEN_SIZE) / 2, (MAX_Y - SCREEN_SIZE - 22) / 2, SCREEN_SIZE, SCREEN_SIZE);
         gamePanel.repaint();
     }
+
     void initVariables() {
         dx = new int[4];
         dy = new int[4];
@@ -433,6 +454,18 @@ public class GameEngine extends Window {
 
     void announcement() {
         JLabel condition = new JLabel("You Lose");
+        JLabel condition2 = new JLabel("Score: " + score);  // Hiển thị điểm số
+    
+        JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS)); // Đặt layout cho panel
+        panel.add(condition);
+        panel.add(condition2);
+    
+        JOptionPane.showMessageDialog(null, panel, "Announcement", JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    void announcementYouWin() {
+        JLabel condition = new JLabel("You Win");
         JLabel condition2 = new JLabel("Score: " + score);  // Hiển thị điểm số
     
         JPanel panel = new JPanel();
