@@ -6,15 +6,15 @@ class Ghost {
     private int speed;
     private int dx, dy;
     private Image defaultIcon;
-    private int detection_radius;
+    private int detectionRadius;
 
-    public Ghost(int x, int y, int speed, int dx, int dy, int detection_radius) {
+    public Ghost(int x, int y, int speed, int dx, int dy, int detectionRadius) {
         this.x = x;
         this.y = y;
         this.dx = dx;
         this.dy = dy;
         this.speed = speed;
-        this.detection_radius = detection_radius;
+        this.detectionRadius = detectionRadius;
         this.defaultIcon = new ImageIcon("src/Image/ghost.gif").getImage().getScaledInstance(14, 14, Image.SCALE_DEFAULT);
     }
 
@@ -44,12 +44,12 @@ class Ghost {
         return dy;
     }
     
-    public int getDetection_radius() {
-        return detection_radius;
+    public int getDetectionRadius() {
+        return detectionRadius;
     }
 
-    public void setDetection_radius(int detection_radius) {
-        this.detection_radius = detection_radius;
+    public void setDetectionRadius(int detectionRadius) {
+        this.detectionRadius = detectionRadius;
     }
 
     public Image getDefaultIcon() {
