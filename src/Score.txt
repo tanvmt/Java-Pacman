@@ -18,3 +18,7 @@ K biet nua,39
 ,0
 ,0
 ,0
+Aaaaaaaaaaaaaaaa,19
+Ppppppppppppp,28
+Rrrrrrrrrr,43
+ssssss,34
