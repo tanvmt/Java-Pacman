@@ -19,16 +19,18 @@ public class GameEngine extends Window {
     private JButton backButton;
     private Ghost[] ghost;
     private Level level;
-    public Timer timer, frightenedGhostTimer;
+    public Timer timer = new Timer(40, e -> this.updateGame());
     private int[] dx, dy;
     private int ghost_x, ghost_y, ghost_dx, ghost_dy;
     
     private Pacman pacman;
     private int req_dx,req_dy;
-    private int score = 0;
+    private int score;
     private boolean inGame = true;
     private Image up, down, left, right, basic;
-    private int lives = 3;
+    private int lives;
+    private int maxScore;
+    private int levelCount = 1;
 
     private String namePlayer;
 
@@ -37,21 +39,22 @@ public class GameEngine extends Window {
     MyFrame tmpMyFrame;
    
     GameEngine() {
-        gamePanel = new GamePanel();
+
         setBackground(Color.BLACK);
         setLayout(null);
         loadImage();
-        initVariables();
-        initGhosts();
         initLevel();
+        initVariables();
+
+        initGhosts();
+
         add(backButton);
 
         initPacman();
-        System.out.println("11111111111111");
         setFocusable(true);
         // addKeyListener(this);
         addKeyListener(new TAdapter());
-        System.out.println("22222222222222");
+        gamePanel = new GamePanel();
 
         addComponentListener(new java.awt.event.ComponentAdapter() {
             public void componentShown(java.awt.event.ComponentEvent evt) {
@@ -63,13 +66,9 @@ public class GameEngine extends Window {
     }
 
     class GamePanel extends JPanel {
-        int x;
-
         GamePanel() {
             setBackground(Color.BLACK);
             setBounds((MAX_X - SCREEN_SIZE) / 2, (MAX_Y - SCREEN_SIZE - 22) / 2, SCREEN_SIZE, SCREEN_SIZE);
-            // setVisible(false);
-            x = MAX_X;
         }
         
         @Override
@@ -84,11 +83,13 @@ public class GameEngine extends Window {
     }
     
     private void returnToMenu() {
-        timer.stop();  // Stop the game timer when returning to the menu
+        if (timer != null) {
+            timer.stop();  // Stop the game timer when returning to the menu
+        }
         
         CardLayout cl = (CardLayout) getParent().getLayout();
         // cl.show(getParent(), "Highscores");
-
+        // showScore.setText("");
         cl.show(getParent(), "Menu");  // Switch back to the menu in MainPanel
     }
     public void newMenu(){
@@ -147,7 +148,7 @@ public class GameEngine extends Window {
     void initPacman(){
         req_dx = 0;
         req_dy = 0;
-        pacman = new Pacman(5 + 7*BLOCK_SIZE, 5+4*BLOCK_SIZE,0,0);
+        pacman = new Pacman(level.getSpawnPacmanX(), level.getSpawnPacmanY(),0,0);
     }
     
     void drawPacman(Graphics2D g2d){
@@ -175,7 +176,6 @@ public class GameEngine extends Window {
         int pacmand_y = pacman.getdPacmanY();
         int PACMAN_SPEED = pacman.getSpeed();
 
-        System.out.println(pacman_x + " " + pacman_y);
         
         if((pacman_x-5) % BLOCK_SIZE == 0 && (pacman_y-5) % BLOCK_SIZE ==0){
             pos = (pacman_x - 5) / BLOCK_SIZE + N_BLOCKS * (int) ((pacman_y - 5) / BLOCK_SIZE);
@@ -185,6 +185,9 @@ public class GameEngine extends Window {
                 screenData[pos] = (short) (ch & 15);
                 score++;
                 showScore.setText(String.valueOf(score));
+                if (score == maxScore) {
+                    changeNextLevel();
+                }
             }
             
             if(req_dx != 0 || req_dy !=0){
@@ -214,15 +217,24 @@ public class GameEngine extends Window {
     }
     
 
+    void changeNextLevel() {
+        // levelCount++;
+        // score--;
+        showScore.setText(--score + "");
+        showLevel.setText(++levelCount + "");
+        initLevel();      
+        initGhosts();
+        initPacman();
+        gamePanel.setBounds((MAX_X - SCREEN_SIZE) / 2, (MAX_Y - SCREEN_SIZE - 22) / 2, SCREEN_SIZE, SCREEN_SIZE);
+        gamePanel.repaint();
+    }
     void initVariables() {
         dx = new int[4];
         dy = new int[4];
-        timer = new Timer(40, e -> this.updateGame());
+
 
         backButton = createButton("BACK", 0, 0, 150, 50, e -> {
-            // WriterScore();
             setNamePlayer(null);
-            score=1;
             returnToMenu();});
 
         move = createLabel("MOVE", 75, 150);
@@ -230,37 +242,48 @@ public class GameEngine extends Window {
         resume = createLabel("RESUME", 75, move.getY() + move.getHeight() + 300);
 
         levelLabel = createLabel("LEVEL", MAX_X - 220, 150);
-        showLevel = createLabel("1", MAX_X - 220, 200);
-        scoreLabel = createLabel("SCORE", MAX_X - 220, 300);
+        showLevel = createLabel(levelCount + "", MAX_X - 220, 200);
         showScore = createLabel(--score + "", MAX_X - 220, 350);
+        scoreLabel = createLabel("SCORE", MAX_X - 220, 300);
+        
         livesLabel = createLabel("LIVES", MAX_X - 220, 450);
 
     }
 
     void initGhosts() {
-        ghost = new Ghost[4];
-        ghost[0] = new Ghost(5, 5, 4, 0, 0, 100);
-        ghost[1] = new Ghost(5, 5 + BLOCK_SIZE * 30, 4, 0, 0, 100);
-        ghost[2] = new Ghost(5 + BLOCK_SIZE * 30, 5, 4, 0, 0, 100);
-        ghost[3] = new Ghost(5 + BLOCK_SIZE * 30, 5 + BLOCK_SIZE * 30, 4, 0, 0, 100);
+        ghost = new Ghost[level.getGhostQuantity()];
+        // ghost[0] = new Ghost(5, 5, 4, 0, 0, 100);
+        // ghost[1] = new Ghost(5, 5 + BLOCK_SIZE * (N_BLOCKS-1), 4, 0, 0, 100);
+        // // ghost[2] = new Ghost(5 + BLOCK_SIZE * 30, 5, 4, 0, 0, 100);
+        // // ghost[3] = new Ghost(5 + BLOCK_SIZE * 30, 5 + BLOCK_SIZE * 30, 4, 0, 0, 100);
+        int[] spawnGhostX = level.getSpawnGhostX();
+        int[] spawnGhostY = level.getSpawnGhostY(); 
+        for (int i = 0; i < ghost.length; i++) {
+            ghost[i] = new Ghost(spawnGhostX[i], spawnGhostY[i], level.getGhostSpeed(), 0, 0,
+                    level.getDetectionRadius());
+        }
     }
 
     void initLevel() {
-        level = new Level();
+        level = new Level(levelCount);
+        N_BLOCKS = level.N_BLOCKS;
+        SCREEN_SIZE = level.SCREEN_SIZE;
         screenData = level.screenData;
+        maxScore = level.getMaxScore();
+        // showScore.setText("");
     }
 
     void drawGhosts(Graphics2D g2D) {
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < level.getGhostQuantity(); i++) {
             g2D.drawImage(ghost[i].getDefaultIcon(), ghost[i].getX(), ghost[i].getY(), this);
             g2D.setStroke(new BasicStroke(1));
-            g2D.drawOval(ghost[i].getX() - 96, ghost[i].getY() - 95, 200, 200);
+            // g2D.drawOval((ghost[i].getX() + 7) - level.getDetectionRadius(), (ghost[i].getY() + 7) - level.getDetectionRadius(), level.getDetectionRadius() * 2, level.getDetectionRadius() * 2);
         }
         
     }
 
     void moveGhosts() {
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < level.getGhostQuantity(); i++) {
             ghost_dx = ghost[i].getDx();
             ghost_dy = ghost[i].getDy();
             ghost_x = ghost[i].getX();
@@ -302,7 +325,7 @@ public class GameEngine extends Window {
                 }
 
                 // Chasing Pacman upon detection
-                if (distanceToPacman <= ghost[i].getDetection_radius()) {
+                if (distanceToPacman <= ghost[i].getDetectionRadius()) {
                     int minDistance = Integer.MAX_VALUE;
                     int bestDx = 0, bestDy = 0;
                     for (int j = 0; j < count; j++) {
@@ -398,10 +421,6 @@ public class GameEngine extends Window {
         return this.score;
     }
 
-    void setShowScore(JLabel showScore){
-        this.showScore = showScore;
-    }
-
     void checkLives(){
         if(lives == 0){
             announcement();
@@ -436,18 +455,24 @@ public class GameEngine extends Window {
     }
 
     void resetGame() {
-        // setShowScore(null);
+        if (timer != null && timer.isRunning()) {
+            timer.stop();
+        }
         WriterScore();
         this.lives = 3;
-        score = 0;
-        initVariables();
+        this.score = 0;
+        this.levelCount = 1;
+
+        showScore.setText(--score + "");
+        showLevel.setText(levelCount + "");
         initLevel();
+      
         initGhosts();
         initPacman();
-        setNamePlayer(null);
-        setNamePlayer();
-
-        
+        gamePanel.setBounds((MAX_X - SCREEN_SIZE) / 2, (MAX_Y - SCREEN_SIZE - 22) / 2, SCREEN_SIZE, SCREEN_SIZE);
+    
+        setNamePlayer(null); 
+        setNamePlayer(); 
     }
 
     @Override
