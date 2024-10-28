@@ -220,7 +220,9 @@ public class GameEngine extends Window {
         timer = new Timer(40, e -> this.updateGame());
 
         backButton = createButton("BACK", 0, 0, 150, 50, e -> {
-            WriterScore();
+            // WriterScore();
+            setNamePlayer(null);
+            score=1;
             returnToMenu();});
 
         move = createLabel("MOVE", 75, 150);
@@ -396,6 +398,10 @@ public class GameEngine extends Window {
         return this.score;
     }
 
+    void setShowScore(JLabel showScore){
+        this.showScore = showScore;
+    }
+
     void checkLives(){
         if(lives == 0){
             announcement();
@@ -420,15 +426,18 @@ public class GameEngine extends Window {
       
     void WriterScore(){
         try (BufferedWriter writer = new BufferedWriter(new FileWriter("src\\Score.txt", true))) {  // Chế độ append
-            writer.write(namePlayer + "," + score);  // Ghi tên và điểm số
-            writer.newLine();  // Xuống dòng
+            if(namePlayer!=null){
+                writer.write(namePlayer + "," + score);  // Ghi tên và điểm số
+                writer.newLine();  // Xuống dòng
+            }
         } catch (IOException e) {
             System.out.println("Error writing to file: " + e.getMessage());
         }
     }
 
     void resetGame() {
-        this.showScore=null;
+        // setShowScore(null);
+        WriterScore();
         this.lives = 3;
         score = 0;
         initVariables();
@@ -437,6 +446,8 @@ public class GameEngine extends Window {
         initPacman();
         setNamePlayer(null);
         setNamePlayer();
+
+        
     }
 
     @Override
