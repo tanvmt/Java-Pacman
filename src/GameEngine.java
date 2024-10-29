@@ -234,10 +234,12 @@ public class GameEngine extends Window {
 
     void changeNextLevel() {
         // levelCount++;
-        // score--;
-        showScore.setText(--score + "");
-        showLevel.setText(++levelCount + "");
-        if (levelCount > 3) {
+        // score--;8
+        if (levelCount < 3){
+            showScore.setText(--score + "");
+            showLevel.setText(++levelCount + "");
+        }
+        else {
             announcementYouWin();
             WriterScore();
             returnToMenu();
@@ -256,6 +258,7 @@ public class GameEngine extends Window {
 
         backButton = createButton("BACK", 0, 0, 150, 50, e -> {
             setNamePlayer(null);
+            score = 0;
             returnToMenu();});
 
         move = createLabel("MOVE", 75, 150);
@@ -532,7 +535,6 @@ public class GameEngine extends Window {
         @Override
         public void keyPressed(KeyEvent e) {
             int key = e.getKeyCode();
-            System.out.println("Key Pressed: " + key); // In ra phím đã nhấn
             inGame = true;
         
             switch(key) {
