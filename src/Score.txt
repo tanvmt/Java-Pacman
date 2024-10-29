@@ -1,3 +1,5 @@
 Huy Son Ca,100
 Tan Tai Loc,50
 Long Ca Hat,70
+Taif,206
+Taif,206
