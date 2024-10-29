@@ -2,6 +2,9 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.DefaultTableCellRenderer;
+import java.util.Enumeration;
+import javax.swing.table.TableColumn;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -241,6 +244,12 @@ class MainPanel extends Window implements ActionListener {
             
             // Tùy chỉnh bảng (font, màu sắc)
             table.setFont(new Font("Arial", Font.PLAIN, 18));
+            DefaultTableCellRenderer center = new DefaultTableCellRenderer();
+            center.setHorizontalAlignment(SwingConstants.CENTER);
+            Enumeration<TableColumn> columns = table.getColumnModel().getColumns();
+            while (columns.hasMoreElements()) {
+                columns.nextElement().setCellRenderer(center);
+            }
             JScrollPane scrollPane = new JScrollPane(table);
             // Thêm bảng trực tiếp vào panel thay vì JScrollPane
             scrollPane.setBounds(390,300,600,330);
