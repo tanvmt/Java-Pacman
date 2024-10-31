@@ -1,10 +1,6 @@
 import java.awt.*;
 
 class Level extends Window{
-
-    private Dimension d;
-
-
     private short levelData[];
     private int ghostQuantity;
     private int[] spawnGhostX, spawnGhostY;
@@ -61,7 +57,6 @@ class Level extends Window{
         spawnPacmanY = 0 + BLOCK_SIZE * 14;
 
         maxScore = 656;
-        //  maxScore = 30;
 
         levelData = new short[] { //0 = BLUE, 1 = LEFT BORDER, 2 = TOP BORDER, 4 = RIGHT BORDER, 8 = BOTTOM BORDER, 16 = DOTS
             19, 26, 18, 26, 26, 18, 26, 26, 18, 26, 18, 26, 18, 26, 26, 18, 26, 26, 18, 26, 22, 
@@ -102,8 +97,7 @@ class Level extends Window{
         spawnPacmanX = 0 + BLOCK_SIZE * 7;
         spawnPacmanY = 0 + BLOCK_SIZE * 5;
 
-        // maxScore = 328;
-         maxScore = 20;
+        maxScore = 328;
 
         levelData = new short[] { //0 = BLUE, 1 = LEFT BORDER, 2 = TOP BORDER, 4 = RIGHT BORDER, 8 = BOTTOM BORDER, 16 = DOTS
             00, 19, 26, 22, 00, 19, 26, 26, 26, 22, 00, 19, 26, 22, 00,
@@ -137,8 +131,8 @@ class Level extends Window{
         spawnPacmanX = 0 + BLOCK_SIZE * 7;
         spawnPacmanY = 0 + BLOCK_SIZE * 6;
 
-        // maxScore = 179;
-        maxScore = 10;
+        maxScore = 179;
+
         levelData = new short[] { //0 = BLUE, 1 = LEFT BORDER, 2 = TOP BORDER, 4 = RIGHT BORDER, 8 = BOTTOM BORDER, 16 = DOTS
             19, 26, 26, 26, 18, 18, 26, 26, 26, 18, 18, 26, 26, 26, 22,
             21, 00, 00, 00, 17, 20, 00, 00, 00, 17, 20, 00, 00, 00, 21,
@@ -176,8 +170,6 @@ class Level extends Window{
 
     private void initVariables(){
         screenData = new short[N_BLOCKS * N_BLOCKS];
-        d = new Dimension(800, 800);
-
     }
 
     private void initLevel(){
@@ -186,19 +178,6 @@ class Level extends Window{
             screenData[i] = levelData[i];
         }
     }
-
-    // public void paintComponent(Graphics g){
-    //     super.paintComponent(g);
-
-    //     Graphics2D g2d = (Graphics2D) g;
-    //     g2d.setColor(Color.black);
-    //     g2d.fillRect(0, 0, d.width, d.height);
-
-    //     drawMaze(g2d);
-
-    //     Toolkit.getDefaultToolkit().sync();
-    //     g2d.dispose();
-    // }
 
     public void drawMaze(Graphics2D g2d){
         short i = 0;

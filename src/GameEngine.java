@@ -1,10 +1,7 @@
 
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
@@ -26,7 +23,6 @@ public class GameEngine extends Window {
     private Pacman pacman;
     private int req_dx,req_dy;
     private int score;
-    private boolean inGame = true;
     private Image up, down, left, right, basic;
     private int lives;
     private int maxScore;
@@ -123,13 +119,13 @@ public class GameEngine extends Window {
     public void drawBackground(Graphics2D g2D) {
         
         add(move);
-        g2D.drawImage(arrowKeys, 75 + (150 - arrowKeys.getWidth(this)) / 2, move.getY() + 50, this);
+        g2D.drawImage(arrowKeys, move.getX() + (move.getWidth() - arrowKeys.getWidth(this)) / 2, move.getY() + 60, this);
         
         add(pause);
-        g2D.drawImage(escKey, 75 + (150 - escKey.getWidth(this)) / 2, pause.getY() + 50, this);
+        g2D.drawImage(escKey, pause.getX() + (pause.getWidth() - escKey.getWidth(this)) / 2, pause.getY() + 60, this);
         
         add(resume);
-        g2D.drawImage(spaceKey, 75 + (150 - spaceKey.getWidth(this)) / 2, resume.getY() + 50,
+        g2D.drawImage(spaceKey, resume.getX() + (resume.getWidth() - spaceKey.getWidth(this)) / 2, resume.getY() + 60,
                 this);
         
         add(levelLabel);
@@ -139,8 +135,10 @@ public class GameEngine extends Window {
         add(scoreLabel);
         add(showScore);
         add(livesLabel);
+        System.out.println("x " + livesLabel.getX());
+        System.out.println("x heart " + (livesLabel.getX() - heart.getWidth(this) * 3 / 2));
         for (int i = 0; i < lives; i++) {
-            g2D.drawImage(heart, MAX_X - 208 + i * heart.getWidth(this), livesLabel.getY() + 50, this);
+            g2D.drawImage(heart, livesLabel.getX() + (livesLabel.getWidth() - heart.getWidth(this) * 3) / 2 + i * heart.getWidth(this), livesLabel.getY() + 50, this);
         }
         
     }
@@ -174,7 +172,6 @@ public class GameEngine extends Window {
         int pacman_y = pacman.getPacManY();
         int pacmand_x = pacman.getdPacmanX();
         int pacmand_y = pacman.getdPacmanY();
-        int PACMAN_SPEED = pacman.getSpeed();
 
         
         if((pacman_x) % BLOCK_SIZE == 0 && (pacman_y) % BLOCK_SIZE ==0){
@@ -216,25 +213,7 @@ public class GameEngine extends Window {
         
     }
     
-
-    // void changeNextLevel() {
-    //     // levelCount++;
-    //     // score--;
-    //     showScore.setText(--score + "");
-    //     showLevel.setText(++levelCount + "");
-    //     initLevel();      
-    //     initGhosts();
-    //     initPacman();
-    //     gamePanel.setBounds((MAX_X - SCREEN_SIZE) / 2, (MAX_Y - SCREEN_SIZE - 22) / 2, SCREEN_SIZE, SCREEN_SIZE);
-    //     gamePanel.repaint();
-    //     if(score == 1006){
-
-    //     }
-    // }
-
     void changeNextLevel() {
-        // levelCount++;
-        // score--;8
         if (levelCount < 3){
             showScore.setText(--score + "");
             showLevel.setText(++levelCount + "");
@@ -256,30 +235,27 @@ public class GameEngine extends Window {
         dy = new int[4];
 
 
-        backButton = createButton("BACK", 0, 0, 150, 50, e -> {
+        backButton = createButton("BACK", 0, 0, 200, 50, e -> {
             setNamePlayer(null);
             score = 0;
             returnToMenu();});
 
-        move = createLabel("MOVE", 75, 150);
-        pause = createLabel("PAUSE", 75, move.getY() + move.getHeight() + 150);
-        resume = createLabel("RESUME", 75, move.getY() + move.getHeight() + 300);
+        move = createLabel("MOVE", 100, 150, 200, 50, 30, Color.RED);
+        pause = createLabel("PAUSE", 100, move.getY() + move.getHeight() + 150,200, 50, 30, Color.RED);
+        resume = createLabel("RESUME", 100, move.getY() + move.getHeight() + 300, 200, 50, 30, Color.RED);
 
-        levelLabel = createLabel("LEVEL", MAX_X - 220, 150);
-        showLevel = createLabel(levelCount + "", MAX_X - 220, 200);
-        showScore = createLabel(--score + "", MAX_X - 220, 350);
-        scoreLabel = createLabel("SCORE", MAX_X - 220, 300);
+        levelLabel = createLabel("LEVEL", MAX_X - 300, 150, 200, 50, 30, Color.RED);
+        showLevel = createLabel(levelCount + "", MAX_X - 300, levelLabel.getY() + 60, 200, 50, 30, Color.WHITE);
         
-        livesLabel = createLabel("LIVES", MAX_X - 220, 450);
+        scoreLabel = createLabel("SCORE", MAX_X - 300, move.getY() + move.getHeight() + 150, 200, 50, 30, Color.RED);
+        showScore = createLabel(--score + "", MAX_X - 300, scoreLabel.getY() + 60, 200, 50, 30, Color.WHITE);
+                
+        livesLabel = createLabel("LIVES", MAX_X - 300, move.getY() + move.getHeight() + 300, 200, 50, 30, Color.RED);
 
     }
 
     void initGhosts() {
         ghost = new Ghost[level.getGhostQuantity()];
-        // ghost[0] = new Ghost(5, 5, 4, 0, 0, 100);
-        // ghost[1] = new Ghost(5, 5 + BLOCK_SIZE * (N_BLOCKS-1), 4, 0, 0, 100);
-        // // ghost[2] = new Ghost(5 + BLOCK_SIZE * 30, 5, 4, 0, 0, 100);
-        // // ghost[3] = new Ghost(5 + BLOCK_SIZE * 30, 5 + BLOCK_SIZE * 30, 4, 0, 0, 100);
         int[] spawnGhostX = level.getSpawnGhostX();
         int[] spawnGhostY = level.getSpawnGhostY(); 
         for (int i = 0; i < ghost.length; i++) {
@@ -551,7 +527,6 @@ public class GameEngine extends Window {
         @Override
         public void keyPressed(KeyEvent e) {
             int key = e.getKeyCode();
-            inGame = true;
         
             switch(key) {
                 case KeyEvent.VK_LEFT:
@@ -563,10 +538,8 @@ public class GameEngine extends Window {
                     req_dy = 0;
                     break;
                 case KeyEvent.VK_UP:
-                    
                     req_dx = 0;
                     req_dy = -1;
-                    
                     break;
                 case KeyEvent.VK_DOWN:
                     req_dx = 0;
@@ -580,54 +553,5 @@ public class GameEngine extends Window {
                     break;
             }
         }
-}
-
-
-
-//     @Override
-//     public void keyTyped(KeyEvent e) {
-//         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-//     }
-
-//     @Override
-// public void keyPressed(KeyEvent e) {
-//     int key = e.getKeyCode();
-//     System.out.println("Key Pressed: " + key); // In ra phím đã nhấn
-//     inGame = true;
-
-//     switch(key) {
-//         case KeyEvent.VK_LEFT:
-//             req_dx = -1;
-//             req_dy = 0;
-//             break;
-//         case KeyEvent.VK_RIGHT:
-//             req_dx = 1;
-//             req_dy = 0;
-//             break;
-//         case KeyEvent.VK_UP:
-            
-//             req_dx = 0;
-//             req_dy = -1;
-            
-//             break;
-//         case KeyEvent.VK_DOWN:
-//             req_dx = 0;
-//             req_dy = 1;
-//             break;
-//         case KeyEvent.VK_ESCAPE:
-//             timer.stop();
-//             break;
-//         case KeyEvent.VK_SPACE:
-//             timer.start();
-//             break;
-//     }
-// }
-
-
-
-//     @Override
-//     public void keyReleased(KeyEvent e) {
-//         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-//     }
-    
+    }   
 }
