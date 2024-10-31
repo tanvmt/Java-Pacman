@@ -98,11 +98,11 @@ public class GameEngine extends Window {
     }
     
     public void loadImage() {
-        up = new ImageIcon("src\\Image\\up.gif").getImage().getScaledInstance(14, 14, Image.SCALE_DEFAULT);
-        down = new ImageIcon("src\\Image\\down.gif").getImage().getScaledInstance(14, 14, Image.SCALE_DEFAULT);
-        left = new ImageIcon("src\\Image\\left.gif").getImage().getScaledInstance(14, 14, Image.SCALE_DEFAULT);
-        right = new ImageIcon("src\\Image\\right.gif").getImage().getScaledInstance(14, 14, Image.SCALE_DEFAULT);
-        basic = new ImageIcon("src\\Image\\pacman.png").getImage().getScaledInstance(14, 14, Image.SCALE_DEFAULT);
+        up = new ImageIcon("src\\Image\\up.gif").getImage().getScaledInstance(18, 18, Image.SCALE_DEFAULT);
+        down = new ImageIcon("src\\Image\\down.gif").getImage().getScaledInstance(18, 18, Image.SCALE_DEFAULT);
+        left = new ImageIcon("src\\Image\\left.gif").getImage().getScaledInstance(18, 18, Image.SCALE_DEFAULT);
+        right = new ImageIcon("src\\Image\\right.gif").getImage().getScaledInstance(18, 18, Image.SCALE_DEFAULT);
+        basic = new ImageIcon("src\\Image\\pacman.png").getImage().getScaledInstance(18, 18, Image.SCALE_DEFAULT);
 
         arrowKeys = new ImageIcon("src\\Image\\Arrow_keys.png").getImage();
         arrowKeys = arrowKeys.getScaledInstance(arrowKeys.getWidth(this) * 2, arrowKeys.getHeight(this) * 2,
@@ -154,16 +154,16 @@ public class GameEngine extends Window {
     void drawPacman(Graphics2D g2d){
         
         if (req_dx == -1) {
-        	g2d.drawImage(left, pacman.getPacManX(), pacman.getPacManY(), this);
+        	g2d.drawImage(left, pacman.getPacManX() + 3, pacman.getPacManY() + 3, this);
         } else if (req_dx == 1) {
-        	g2d.drawImage(right, pacman.getPacManX(), pacman.getPacManY(), this);
+        	g2d.drawImage(right, pacman.getPacManX() + 3, pacman.getPacManY() + 3, this);
         } else if (req_dy == -1) {
-        	g2d.drawImage(up, pacman.getPacManX(), pacman.getPacManY() , this);
+        	g2d.drawImage(up, pacman.getPacManX() + 3, pacman.getPacManY() + 3, this);
         } else if(req_dy == 1){
-        	g2d.drawImage(down, pacman.getPacManX(), pacman.getPacManY() , this);
+        	g2d.drawImage(down, pacman.getPacManX() + 3, pacman.getPacManY() + 3, this);
         }
         else{
-            g2d.drawImage(basic, pacman.getPacManX(), pacman.getPacManY() , this);
+            g2d.drawImage(basic, pacman.getPacManX() + 3, pacman.getPacManY() + 3, this);
         }
     }
     
@@ -177,8 +177,8 @@ public class GameEngine extends Window {
         int PACMAN_SPEED = pacman.getSpeed();
 
         
-        if((pacman_x-5) % BLOCK_SIZE == 0 && (pacman_y-5) % BLOCK_SIZE ==0){
-            pos = (pacman_x - 5) / BLOCK_SIZE + N_BLOCKS * (int) ((pacman_y - 5) / BLOCK_SIZE);
+        if((pacman_x) % BLOCK_SIZE == 0 && (pacman_y) % BLOCK_SIZE ==0){
+            pos = pacman_x / BLOCK_SIZE + N_BLOCKS * (int) (pacman_y / BLOCK_SIZE);
             ch = screenData[pos];
             
             if((ch&16) != 0){
@@ -299,7 +299,7 @@ public class GameEngine extends Window {
 
     void drawGhosts(Graphics2D g2D) {
         for (int i = 0; i < level.getGhostQuantity(); i++) {
-            g2D.drawImage(ghost[i].getDefaultIcon(), ghost[i].getX(), ghost[i].getY(), this);
+            g2D.drawImage(ghost[i].getDefaultIcon(), ghost[i].getX() + 3, ghost[i].getY() + 3, this);
             g2D.setStroke(new BasicStroke(1));
             // g2D.drawOval((ghost[i].getX() + 7) - level.getDetectionRadius(), (ghost[i].getY() + 7) - level.getDetectionRadius(), level.getDetectionRadius() * 2, level.getDetectionRadius() * 2);
         }
@@ -317,9 +317,16 @@ public class GameEngine extends Window {
 
             int distanceToPacman = (int) Math.sqrt(Math.pow(ghost_x - pacman.getPacManX(), 2) + Math.pow(ghost_y - pacman.getPacManY(), 2));
 
-            if ((ghost_x - 5) % BLOCK_SIZE == 0 && (ghost_y - 5) % BLOCK_SIZE == 0) {
-                pos = (ghost_x - 5) / BLOCK_SIZE + N_BLOCKS * (int) ((ghost_y - 5) / BLOCK_SIZE);
+            if ((ghost_x) % BLOCK_SIZE == 0 && (ghost_y) % BLOCK_SIZE == 0) {
+                int gridX = ghost_x / BLOCK_SIZE;
+                int gridY = ghost_y / BLOCK_SIZE;
+                pos = gridX + N_BLOCKS * gridY;
+                if (i == 0 && levelCount == 3) {
+                    System.out.println("--------------\nYES");
+                    System.out.println(screenData[pos]);
+                }
                 
+
                 // Check left border
                 if ((screenData[pos] & 1) == 0 && ghost_dx != 1) {
                     dx[count] = -1;
@@ -348,6 +355,9 @@ public class GameEngine extends Window {
                     count++;
                 }
 
+                if (i == 0 && levelCount == 3) {
+                    System.out.println("count before random " + count);
+                }
                 // Chasing Pacman upon detection
                 if (distanceToPacman <= ghost[i].getDetectionRadius()) {
                     int minDistance = Integer.MAX_VALUE;
@@ -366,8 +376,7 @@ public class GameEngine extends Window {
                         }
                     }
                     ghost[i].setDirection(bestDx, bestDy);
-                }
-                else if (count == 0) { // Avoid stuck
+                } else if (count == 0) { // Avoid stuck
                     if ((screenData[pos] & 15) == 15) {
                         ghost_dx = 0;
                         ghost_dy = 0;
@@ -375,13 +384,17 @@ public class GameEngine extends Window {
                         ghost_dx = -ghost_dx;
                         ghost_dy = -ghost_dy;
                     }
-                } else { // Random direction
+                    ghost[i].setDirection(ghost_dx, ghost_dy);
+                } else if(count>0){ // Random direction
                     count = (int) (Math.random() * count);
 
                     if (count > 3) {
                         count = 3;
                     }
-
+                    
+                    if (i == 0 && levelCount == 3) {
+                        System.out.println("count after random " + count);
+                    }
                     ghost_dx = dx[count];
                     ghost_dy = dy[count];
                     ghost[i].setDirection(ghost_dx, ghost_dy);
@@ -389,8 +402,11 @@ public class GameEngine extends Window {
                 }
 
             }
-            ghost[i].move();
             
+            ghost[i].move();
+            if (i == 0 && levelCount == 3) {
+                System.out.println(ghost_x + " " + ghost_y + " " + pos);
+            }
             // Check collision with Pacman
             if (pacman.getPacManX() > (ghost_x - 14) && pacman.getPacManX() < (ghost_x + 14)
                     && pacman.getPacManY() > (ghost_y - 14) && pacman.getPacManY() < (ghost_y + 14)

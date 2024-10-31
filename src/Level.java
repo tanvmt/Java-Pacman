@@ -52,13 +52,13 @@ class Level extends Window{
         SCREEN_SIZE = N_BLOCKS * BLOCK_SIZE;
 
         ghostQuantity = 4;
-        spawnGhostX = new int[] { 5, 5, 5 + BLOCK_SIZE * (N_BLOCKS - 1), 5 + BLOCK_SIZE * (N_BLOCKS - 1)};
-        spawnGhostY = new int[] { 5, 5 + BLOCK_SIZE * (N_BLOCKS - 1), 5, 5 + BLOCK_SIZE * (N_BLOCKS - 1)};
+        spawnGhostX = new int[] { 0, 0, 0 + BLOCK_SIZE * (N_BLOCKS - 1), 0 + BLOCK_SIZE * (N_BLOCKS - 1)};
+        spawnGhostY = new int[] { 0, 0 + BLOCK_SIZE * (N_BLOCKS - 1), 0, 0 + BLOCK_SIZE * (N_BLOCKS - 1)};
         ghostSpeed = 4;
         detectionRadius = 100;
 
-        spawnPacmanX = 5 + BLOCK_SIZE * 13;
-        spawnPacmanY = 5 + BLOCK_SIZE * 14;
+        spawnPacmanX = 0 + BLOCK_SIZE * 13;
+        spawnPacmanY = 0 + BLOCK_SIZE * 14;
 
         maxScore = 656;
         //  maxScore = 30;
@@ -94,16 +94,16 @@ class Level extends Window{
         SCREEN_SIZE = N_BLOCKS * BLOCK_SIZE;
 
         ghostQuantity = 2;
-        spawnGhostX = new int[] { 5 + BLOCK_SIZE, 5 + BLOCK_SIZE * (N_BLOCKS - 2) };
-        spawnGhostY = new int[] { 5, 5 + BLOCK_SIZE * (N_BLOCKS - 1) };
+        spawnGhostX = new int[] { 0 + BLOCK_SIZE, 0 + BLOCK_SIZE * (N_BLOCKS - 2) };
+        spawnGhostY = new int[] { 0, 0 + BLOCK_SIZE * (N_BLOCKS - 1) };
         ghostSpeed = 4;
         detectionRadius = 50;
 
-        spawnPacmanX = 5 + BLOCK_SIZE * 7;
-        spawnPacmanY = 5 + BLOCK_SIZE * 5;
+        spawnPacmanX = 0 + BLOCK_SIZE * 7;
+        spawnPacmanY = 0 + BLOCK_SIZE * 5;
 
-        maxScore = 328;
-        //  maxScore = 20;
+        // maxScore = 328;
+         maxScore = 20;
 
         levelData = new short[] { //0 = BLUE, 1 = LEFT BORDER, 2 = TOP BORDER, 4 = RIGHT BORDER, 8 = BOTTOM BORDER, 16 = DOTS
             00, 19, 26, 22, 00, 19, 26, 26, 26, 22, 00, 19, 26, 22, 00,
@@ -129,16 +129,16 @@ class Level extends Window{
         SCREEN_SIZE = N_BLOCKS * BLOCK_SIZE;
 
         ghostQuantity = 2;
-        spawnGhostX = new int[] { 5, 5 + BLOCK_SIZE * (N_BLOCKS - 1) };
-        spawnGhostY = new int[] { 5, 5 + BLOCK_SIZE * (N_BLOCKS - 1) };
+        spawnGhostX = new int[] { 0, 0 + BLOCK_SIZE * (N_BLOCKS - 1) };
+        spawnGhostY = new int[] { 0, 0 + BLOCK_SIZE * (N_BLOCKS - 1) };
         ghostSpeed = 3;
         detectionRadius = 50;
 
-        spawnPacmanX = 5 + BLOCK_SIZE * 7;
-        spawnPacmanY = 5 + BLOCK_SIZE * 6;
+        spawnPacmanX = 0 + BLOCK_SIZE * 7;
+        spawnPacmanY = 0 + BLOCK_SIZE * 6;
 
-        maxScore = 179;
-        // maxScore = 10;
+        // maxScore = 179;
+        maxScore = 10;
         levelData = new short[] { //0 = BLUE, 1 = LEFT BORDER, 2 = TOP BORDER, 4 = RIGHT BORDER, 8 = BOTTOM BORDER, 16 = DOTS
             19, 26, 26, 26, 18, 18, 26, 26, 26, 18, 18, 26, 26, 26, 22,
             21, 00, 00, 00, 17, 20, 00, 00, 00, 17, 20, 00, 00, 00, 21,
