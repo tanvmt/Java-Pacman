@@ -15,7 +15,7 @@ class Ghost {
         this.dy = dy;
         this.speed = speed;
         this.detectionRadius = detectionRadius;
-        this.defaultIcon = new ImageIcon("src/Image/ghost.gif").getImage().getScaledInstance(14, 14, Image.SCALE_DEFAULT);
+        this.defaultIcon = new ImageIcon("src/Image/ghost.gif").getImage().getScaledInstance(18, 18, Image.SCALE_DEFAULT);
     }
 
     public void setDirection(int dx, int dy) {

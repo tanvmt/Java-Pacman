@@ -3,3 +3,7 @@ Tan Tai Loc,50
 Long Ca Hat,70
 Taif,206
 Taif,206
+,30
+,25
+,25
+,63
