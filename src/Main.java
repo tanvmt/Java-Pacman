@@ -319,7 +319,7 @@ class MainPanel extends Window implements ActionListener {
         if (source == menu.menuButtons[3])
             System.exit(0);
         else if (source == menu.menuButtons[0]) {
-            gameEngine.resetGame();
+            gameEngine.createGame();
             if(gameEngine.getNamePlayer() == null){
                 cl.show(this, "Menu");
             }
