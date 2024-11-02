@@ -42,13 +42,10 @@ public class GameEngine extends Window {
         initLevel();
         initVariables();
 
-        initGhosts();
-
         add(backButton);
 
-        initPacman();
         setFocusable(true);
-        // addKeyListener(this);
+
         addKeyListener(new TAdapter());
         gamePanel = new GamePanel();
 
@@ -84,13 +81,7 @@ public class GameEngine extends Window {
         }
         
         CardLayout cl = (CardLayout) getParent().getLayout();
-        // cl.show(getParent(), "Highscores");
-        // showScore.setText("");
         cl.show(getParent(), "Menu");  // Switch back to the menu in MainPanel
-    }
-    public void newMenu(){
-        this.removeAll();
-        tmpMyFrame = new MyFrame();
     }
     
     public void loadImage() {
@@ -135,8 +126,6 @@ public class GameEngine extends Window {
         add(scoreLabel);
         add(showScore);
         add(livesLabel);
-        System.out.println("x " + livesLabel.getX());
-        System.out.println("x heart " + (livesLabel.getX() - heart.getWidth(this) * 3 / 2));
         for (int i = 0; i < lives; i++) {
             g2D.drawImage(heart, livesLabel.getX() + (livesLabel.getWidth() - heart.getWidth(this) * 3) / 2 + i * heart.getWidth(this), livesLabel.getY() + 50, this);
         }
@@ -276,8 +265,6 @@ public class GameEngine extends Window {
     void drawGhosts(Graphics2D g2D) {
         for (int i = 0; i < level.getGhostQuantity(); i++) {
             g2D.drawImage(ghost[i].getDefaultIcon(), ghost[i].getX() + 3, ghost[i].getY() + 3, this);
-            g2D.setStroke(new BasicStroke(1));
-            // g2D.drawOval((ghost[i].getX() + 7) - level.getDetectionRadius(), (ghost[i].getY() + 7) - level.getDetectionRadius(), level.getDetectionRadius() * 2, level.getDetectionRadius() * 2);
         }
         
     }
@@ -294,15 +281,8 @@ public class GameEngine extends Window {
             int distanceToPacman = (int) Math.sqrt(Math.pow(ghost_x - pacman.getPacManX(), 2) + Math.pow(ghost_y - pacman.getPacManY(), 2));
 
             if ((ghost_x) % BLOCK_SIZE == 0 && (ghost_y) % BLOCK_SIZE == 0) {
-                int gridX = ghost_x / BLOCK_SIZE;
-                int gridY = ghost_y / BLOCK_SIZE;
-                pos = gridX + N_BLOCKS * gridY;
-                if (i == 0 && levelCount == 3) {
-                    System.out.println("--------------\nYES");
-                    System.out.println(screenData[pos]);
-                }
+                pos = ghost_x / BLOCK_SIZE + N_BLOCKS * (int) (ghost_y / BLOCK_SIZE);
                 
-
                 // Check left border
                 if ((screenData[pos] & 1) == 0 && ghost_dx != 1) {
                     dx[count] = -1;
@@ -331,9 +311,6 @@ public class GameEngine extends Window {
                     count++;
                 }
 
-                if (i == 0 && levelCount == 3) {
-                    System.out.println("count before random " + count);
-                }
                 // Chasing Pacman upon detection
                 if (distanceToPacman <= ghost[i].getDetectionRadius()) {
                     int minDistance = Integer.MAX_VALUE;
@@ -368,9 +345,6 @@ public class GameEngine extends Window {
                         count = 3;
                     }
                     
-                    if (i == 0 && levelCount == 3) {
-                        System.out.println("count after random " + count);
-                    }
                     ghost_dx = dx[count];
                     ghost_dy = dy[count];
                     ghost[i].setDirection(ghost_dx, ghost_dy);
@@ -380,9 +354,6 @@ public class GameEngine extends Window {
             }
             
             ghost[i].move();
-            if (i == 0 && levelCount == 3) {
-                System.out.println(ghost_x + " " + ghost_y + " " + pos);
-            }
             // Check collision with Pacman
             if (pacman.getPacManX() > (ghost_x - 14) && pacman.getPacManX() < (ghost_x + 14)
                     && pacman.getPacManY() > (ghost_y - 14) && pacman.getPacManY() < (ghost_y + 14)
@@ -440,7 +411,6 @@ public class GameEngine extends Window {
     void checkLives(){
         if(lives == 0){
             announcement();
-            System.out.println(namePlayer+ " " +score);
             WriterScore();
             returnToMenu();
             // newMenu();
@@ -482,11 +452,10 @@ public class GameEngine extends Window {
         }
     }
 
-    void resetGame() {
+    void createGame() {
         if (timer != null && timer.isRunning()) {
             timer.stop();
         }
-        WriterScore();
         this.lives = 3;
         this.score = 0;
         this.levelCount = 1;
@@ -505,16 +474,10 @@ public class GameEngine extends Window {
 
     @Override
     protected void paintComponent(Graphics g) {
-
         super.paintComponent(g);
 
         Graphics2D g2D = (Graphics2D) g;
-        // level.drawMaze(g2D);
-        drawBackground(g2D);
-        // drawPacman(g2D);
-        // drawGhosts(g2D);
-        
-        
+        drawBackground(g2D);     
     }
 
     public void updateGame() {

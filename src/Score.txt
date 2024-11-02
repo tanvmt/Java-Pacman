@@ -2,10 +2,11 @@ Huy Son Ca,100
 Tan Tai Loc,50
 Long Ca Hat,70
 Taif,206
-Taif,206
-,30
-,25
-,25
-,63
-aaaaaaaaaaaaaaaaaaa,27
-,650
+a,105
+Tan123123,656
+123123123,10
+yuopy,13
+abcdef,12
+,23
+,14
+,18
