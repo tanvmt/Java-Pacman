@@ -10,7 +10,6 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 
-//implements KeyListener
 public class GameEngine extends Window {
     private GamePanel gamePanel;
     private JButton backButton;
@@ -32,7 +31,6 @@ public class GameEngine extends Window {
 
     private JLabel scoreLabel, showScore, livesLabel, move, pause, resume, levelLabel, showLevel;
     private Image arrowKeys, spaceKey, escKey, heart;
-    MyFrame tmpMyFrame;
    
     GameEngine() {
 
@@ -127,7 +125,8 @@ public class GameEngine extends Window {
         add(showScore);
         add(livesLabel);
         for (int i = 0; i < lives; i++) {
-            g2D.drawImage(heart, livesLabel.getX() + (livesLabel.getWidth() - heart.getWidth(this) * 3) / 2 + i * heart.getWidth(this), livesLabel.getY() + 50, this);
+            g2D.drawImage(heart, livesLabel.getX() + (livesLabel.getWidth() - heart.getWidth(this) * 3) / 2 + i * heart.getWidth(this),
+                    livesLabel.getY() + 50, this);
         }
         
     }
@@ -355,8 +354,8 @@ public class GameEngine extends Window {
             
             ghost[i].move();
             // Check collision with Pacman
-            if (pacman.getPacManX() > (ghost_x - 14) && pacman.getPacManX() < (ghost_x + 14)
-                    && pacman.getPacManY() > (ghost_y - 14) && pacman.getPacManY() < (ghost_y + 14)
+            if (pacman.getPacManX() > (ghost_x - 18) && pacman.getPacManX() < (ghost_x + 18)
+                    && pacman.getPacManY() > (ghost_y - 18) && pacman.getPacManY() < (ghost_y + 18)
                     ) {
                 this.lives -= 1;        
                 timer.stop();
