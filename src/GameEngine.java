@@ -355,8 +355,8 @@ public class GameEngine extends Window {
             
             ghost[i].move();
             // Check collision with Pacman
-            if (pacman.getPacManX() > (ghost_x - 14) && pacman.getPacManX() < (ghost_x + 14)
-                    && pacman.getPacManY() > (ghost_y - 14) && pacman.getPacManY() < (ghost_y + 14)
+            if (pacman.getPacManX() > (ghost_x - 18) && pacman.getPacManX() < (ghost_x + 18)
+                    && pacman.getPacManY() > (ghost_y - 18) && pacman.getPacManY() < (ghost_y + 18)
                     ) {
                 this.lives -= 1;        
                 timer.stop();
@@ -489,6 +489,7 @@ public class GameEngine extends Window {
     class TAdapter extends KeyAdapter {
         @Override
         public void keyPressed(KeyEvent e) {
+            
             int key = e.getKeyCode();
         
             switch(key) {

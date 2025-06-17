@@ -281,12 +281,14 @@ class MainPanel extends Window implements ActionListener {
             
             // Tùy chỉnh bảng (font, màu sắc)
             table.setFont(customFont.deriveFont(Font.PLAIN, 12));
+            // căn dữ liệu các ô vào giữa
             DefaultTableCellRenderer center = new DefaultTableCellRenderer();
             center.setHorizontalAlignment(SwingConstants.CENTER);
             Enumeration<TableColumn> columns = table.getColumnModel().getColumns();
             while (columns.hasMoreElements()) {
                 columns.nextElement().setCellRenderer(center);
             }
+            // Tạo Thanh cuộn bằng JScrollPane 
             JScrollPane scrollPane = new JScrollPane(table);
             // Thêm bảng trực tiếp vào panel thay vì JScrollPane
             scrollPane.setBounds(390,300,600,330);
